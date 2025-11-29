@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "709314346120",
+    "project_id": "smart-bidonville",
+    "storage_bucket": "smart-bidonville.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709314346120:android:77dab2944811eb36d9b33d",
+        "android_client_info": {
+          "package_name": "com.example.smart_bidonville"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsrIi1LrFikrWkcqsbMfCauBBpAVCA6Z0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
