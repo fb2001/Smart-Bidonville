@@ -12,7 +12,12 @@
           "package_name": "com.example.smart_bidonville"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "709314346120-npvg2ahhuncag0f0n99c9muet1jakojm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAsrIi1LrFikrWkcqsbMfCauBBpAVCA6Z0"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709314346120-npvg2ahhuncag0f0n99c9muet1jakojm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
