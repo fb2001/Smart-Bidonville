@@ -26,6 +26,36 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.dispose();
     super.dispose();
   }
+  Future<void> _handleGoogleLogin() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final credential = await _authService.signInWithGoogle();
+
+      // Si l'utilisateur annule, credential == null => on ne navigue pas
+      if (credential == null) return;
+
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      }
+    } catch (error) {
+      if (!mounted) return;
+      final tr = AppLocalizations.of(context)!;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${tr.errorOccurred}: $error'),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 4),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+
 
   String _getErrorMessage(String errorCode, AppLocalizations tr) {
     switch (errorCode) {
@@ -368,6 +398,28 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ),
                           ),
+                          const SizedBox(height: 24),
+                          const SizedBox(height: 16),
+
+                          Center(
+                            child: InkWell(
+                              onTap: _isLoading ? null : _handleGoogleLogin,
+                              borderRadius: BorderRadius.circular(999),
+                              child: Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Image.asset(
+                                  'assets/google_logo.png',
+                                  height: 28,
+                                  width: 28,
+                                ),
+                              ),
+                            ),
+                          ),
+
                           const SizedBox(height: 24),
 
                           Center(
