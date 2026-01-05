@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
+import 'features/dashboard/view/dashboard_screen.dart';
 import 'services/auth_service.dart';
+import 'features/dashboard/viewmodel/dashboard_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 
@@ -16,24 +18,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Smart Bidonville',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
-        brightness: Brightness.dark,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => DashboardProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Smart Bidonville',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.grey,
+          brightness: Brightness.dark,
+        ),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('fr'),
+        ],
+        home: const FirebaseInitializer(),
       ),
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en'),
-        Locale('fr'),
-      ],
-      home: const FirebaseInitializer(),
     );
   }
 }
@@ -209,8 +218,8 @@ class AuthStateHandler extends StatelessWidget {
 
     // Vérifier si un utilisateur est déjà connecté
     if (authService.currentUser != null) {
-      // Utilisateur connecté → Page d'accueil
-      return const HomeScreen();
+      // Utilisateur connecté → Dashboard
+      return const DashboardScreen();
     } else {
       // Pas d'utilisateur connecté → Page de connexion
       return const LoginScreen();
