@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/models/fan_speed.dart';
 import '../../../core/models/rgb_color.dart';
+import '../../../shared/widgets/ios_card.dart';
+import '../../../shared/theme/ios_theme.dart';
 import '../viewmodel/dashboard_provider.dart';
 
 class ManualControlCard extends StatefulWidget {
-  const ManualControlCard({Key? key}) : super(key: key);
+  const ManualControlCard({super.key});
 
   @override
   State<ManualControlCard> createState() => _ManualControlCardState();
@@ -20,89 +23,95 @@ class _ManualControlCardState extends State<ManualControlCard> {
       builder: (context, provider, _) {
         final isManualMode = provider.state.fanStatus?.mode.isManual ?? false;
 
-        return Card(
-          elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    const Text(
-                      'Manual Control',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Spacer(),
-                    if (!isManualMode)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.orange.shade800,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: const Text(
-                          'DISABLED',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                // Speed selector
-                Column(
-                  children: FanSpeed.values.map((speed) {
-                    return _SpeedRadioTile(
-                      speed: speed,
-                      isSelected: _selectedSpeed == speed,
-                      isEnabled: isManualMode,
-                      onSelect: (selected) {
-                        setState(() {
-                          _selectedSpeed = selected;
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-
-                const SizedBox(height: 16),
-
-                // Apply button
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: isManualMode
-                        ? () async {
-                            final success = await provider.setManualSpeed(_selectedSpeed);
-                            if (success && context.mounted) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Fan speed set to ${_selectedSpeed.displayName}'),
-                                  backgroundColor: Colors.green,
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                          }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
-                    child: const Text('Apply Speed'),
+        return IOSCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.touch_app_rounded,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
-                ),
-              ],
-            ),
+                  const SizedBox(width: IOSTheme.spacing8),
+                  Text(
+                    'Manual Control',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const Spacer(),
+                  if (!isManualMode)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: IOSTheme.spacing12,
+                        vertical: 6,
+                      ),
+                      decoration: BoxDecoration(
+                        color: IOSTheme.dangerColor.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(IOSTheme.radiusSmall),
+                        border: Border.all(
+                          color: IOSTheme.dangerColor.withValues(alpha: 0.3),
+                          width: 1,
+                        ),
+                      ),
+                      child: Text(
+                        'DISABLED',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: IOSTheme.dangerColor,
+                            ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: IOSTheme.spacing16),
+
+              // Speed selector
+              Column(
+                children: FanSpeed.values.map((speed) {
+                  return _SpeedSelectionTile(
+                    speed: speed,
+                    isSelected: _selectedSpeed == speed,
+                    isEnabled: isManualMode,
+                    onSelect: (selected) {
+                      HapticFeedback.selectionClick();
+                      setState(() {
+                        _selectedSpeed = selected;
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+
+              const SizedBox(height: IOSTheme.spacing16),
+
+              // Apply button
+              IOSButton(
+                text: 'Apply Speed',
+                onPressed: isManualMode
+                    ? () async {
+                        final success = await provider.setManualSpeed(_selectedSpeed);
+                        if (success && context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  'Fan speed set to ${_selectedSpeed.displayName}'),
+                              backgroundColor: IOSTheme.accentColor,
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(IOSTheme.radiusMedium),
+                              ),
+                              margin: const EdgeInsets.all(IOSTheme.spacing16),
+                            ),
+                          );
+                        }
+                      }
+                    : null,
+                isPrimary: true,
+                icon: Icons.check_circle_rounded,
+              ),
+            ],
           ),
         );
       },
@@ -110,13 +119,13 @@ class _ManualControlCardState extends State<ManualControlCard> {
   }
 }
 
-class _SpeedRadioTile extends StatelessWidget {
+class _SpeedSelectionTile extends StatelessWidget {
   final FanSpeed speed;
   final bool isSelected;
   final bool isEnabled;
   final ValueChanged<FanSpeed> onSelect;
 
-  const _SpeedRadioTile({
+  const _SpeedSelectionTile({
     required this.speed,
     required this.isSelected,
     required this.isEnabled,
@@ -126,49 +135,110 @@ class _SpeedRadioTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = RgbColor.fromSpeed(speed);
+    final brightness = Theme.of(context).brightness;
+    final bgColor = brightness == Brightness.dark
+        ? IOSTheme.tertiaryBackgroundDark
+        : IOSTheme.secondaryBackgroundLight;
 
-    return Opacity(
-      opacity: isEnabled ? 1.0 : 0.5,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: isEnabled ? () => onSelect(speed) : null,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Row(
-              children: [
-                Radio<FanSpeed>(
-                  value: speed,
-                  groupValue: isSelected ? speed : null,
-                  onChanged: isEnabled ? (val) => onSelect(speed) : null,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: IOSTheme.spacing8),
+      child: Opacity(
+        opacity: isEnabled ? 1.0 : 0.5,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: isEnabled ? () => onSelect(speed) : null,
+            borderRadius: BorderRadius.circular(IOSTheme.radiusMedium),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: IOSTheme.spacing16,
+                vertical: IOSTheme.spacing12,
+              ),
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
+                    : bgColor,
+                borderRadius: BorderRadius.circular(IOSTheme.radiusMedium),
+                border: Border.all(
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.transparent,
+                  width: 2,
                 ),
-                const SizedBox(width: 12),
-                Container(
-                  width: 24,
-                  height: 24,
-                  decoration: BoxDecoration(
-                    color: color.toColor(),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white30, width: 2),
+              ),
+              child: Row(
+                children: [
+                  // Selection indicator
+                  Container(
+                    width: 24,
+                    height: 24,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isSelected
+                            ? Theme.of(context).colorScheme.primary
+                            : Theme.of(context)
+                                .colorScheme
+                                .onSurface
+                                .withValues(alpha: 0.3),
+                        width: 2,
+                      ),
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.transparent,
+                    ),
+                    child: isSelected
+                        ? const Icon(
+                            Icons.check,
+                            size: 16,
+                            color: Colors.white,
+                          )
+                        : null,
                   ),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  speed.displayName,
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  const SizedBox(width: IOSTheme.spacing12),
+
+                  // Color indicator
+                  Container(
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                      color: color.toColor(),
+                      borderRadius: BorderRadius.circular(IOSTheme.radiusSmall),
+                      boxShadow: [
+                        BoxShadow(
+                          color: color.toColor().withValues(alpha: 0.3),
+                          blurRadius: 4,
+                          spreadRadius: 1,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const Spacer(),
-                Text(
-                  'RGB(${color.red},${color.green},${color.blue})',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade500,
+                  const SizedBox(width: IOSTheme.spacing12),
+
+                  // Speed name
+                  Expanded(
+                    child: Text(
+                      speed.displayName,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight:
+                                isSelected ? FontWeight.w600 : FontWeight.normal,
+                          ),
+                    ),
                   ),
-                ),
-              ],
+
+                  // RGB value
+                  Text(
+                    'RGB(${color.red},${color.green},${color.blue})',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.5),
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
