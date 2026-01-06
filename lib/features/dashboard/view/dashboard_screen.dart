@@ -8,8 +8,8 @@ import '../widgets/mode_switch_card.dart';
 import '../widgets/manual_control_card.dart';
 import '../widgets/auto_threshold_card.dart';
 import '../widgets/fan_status_indicator.dart';
-import '../../../services/auth_service.dart';
-import '../../../screens/login_screen.dart';
+import '../../../core/services/auth_service.dart';
+import '../../auth/presentation/screens/login_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);

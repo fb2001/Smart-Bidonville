@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../l10n/app_localizations.dart';
-import '../services/auth_service.dart';
-import '../features/dashboard/view/dashboard_screen.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../../core/services/auth_service.dart';
+import '../../../dashboard/view/dashboard_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
