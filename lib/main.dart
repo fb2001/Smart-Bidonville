@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
 import 'features/dashboard/view/dashboard_screen.dart';
+import 'features/splash/splash_screen.dart';
 import 'core/services/auth_service.dart';
 import 'features/dashboard/viewmodel/dashboard_provider.dart';
+import 'shared/theme/ios_theme.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 
@@ -27,10 +30,9 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Smart Bidonville',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.grey,
-          brightness: Brightness.dark,
-        ),
+        theme: IOSTheme.lightTheme,
+        darkTheme: IOSTheme.darkTheme,
+        themeMode: ThemeMode.system,
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -57,11 +59,18 @@ class FirebaseInitializer extends StatefulWidget {
 class _FirebaseInitializerState extends State<FirebaseInitializer> {
   bool _initialized = false;
   bool _error = false;
+  bool _showSplash = true;
   String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
+    // Set iOS status bar style
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUIOverlayStyle(
+        statusBarBrightness: Brightness.light,
+      ),
+    );
     _initializeFirebase();
   }
 
@@ -82,8 +91,19 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
     }
   }
 
+  void _onSplashComplete() {
+    setState(() {
+      _showSplash = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Show splash screen first
+    if (_showSplash && _initialized && !_error) {
+      return SplashScreen(onComplete: _onSplashComplete);
+    }
+
     // Afficher un écran d'erreur si Firebase ne peut pas s'initialiser
     if (_error) {
       return Scaffold(
