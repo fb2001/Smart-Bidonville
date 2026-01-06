@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../core/models/device_credentials.dart';
+import '../theme/ios_theme.dart';
 import 'qr_scanner_screen.dart';
 
 class IpConfigDialog extends StatefulWidget {
   final String? currentIp;
 
-  const IpConfigDialog({Key? key, this.currentIp}) : super(key: key);
+  const IpConfigDialog({super.key, this.currentIp});
 
   @override
   State<IpConfigDialog> createState() => _IpConfigDialogState();
@@ -61,6 +63,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
   }
 
   Future<void> _handleQrScan() async {
+    HapticFeedback.selectionClick();
     try {
       final credentials = await Navigator.of(context).push<DeviceCredentials>(
         MaterialPageRoute(
@@ -85,11 +88,14 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Row(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(IOSTheme.radiusLarge),
+      ),
+      title: Row(
         children: [
-          Icon(Icons.router, color: Colors.white70),
-          SizedBox(width: 12),
-          Text('ESP32 Configuration'),
+          Icon(Icons.router_rounded, color: Theme.of(context).colorScheme.primary),
+          const SizedBox(width: IOSTheme.spacing12),
+          const Text('ESP32 Configuration'),
         ],
       ),
       content: Column(

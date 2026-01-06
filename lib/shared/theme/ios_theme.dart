@@ -118,7 +118,7 @@ class IOSTheme {
         ),
         textTheme: textTheme,
         appBarTheme: AppBarTheme(
-          backgroundColor: secondaryBackgroundLight.withOpacity(0.9),
+          backgroundColor: secondaryBackgroundLight.withValues(alpha: 0.9),
           elevation: 0,
           scrolledUnderElevation: 0,
           titleTextStyle: textTheme.displaySmall?.copyWith(
@@ -127,7 +127,7 @@ class IOSTheme {
           ),
           iconTheme: const IconThemeData(color: primaryColor),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: backgroundLight,
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -213,7 +213,7 @@ class IOSTheme {
           displayColor: labelDark,
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: backgroundDark.withOpacity(0.9),
+          backgroundColor: backgroundDark.withValues(alpha: 0.9),
           elevation: 0,
           scrolledUnderElevation: 0,
           titleTextStyle: textTheme.displaySmall?.copyWith(
@@ -222,7 +222,7 @@ class IOSTheme {
           ),
           iconTheme: const IconThemeData(color: primaryColor),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: secondaryBackgroundDark,
           elevation: 0,
           shape: RoundedRectangleBorder(

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'features/auth/presentation/screens/login_screen.dart';
+import 'features/auth/presentation/screens/ios_login_screen.dart';
 import 'features/dashboard/view/dashboard_screen.dart';
 import 'features/splash/splash_screen.dart';
 import 'core/services/auth_service.dart';
@@ -67,7 +67,7 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
     super.initState();
     // Set iOS status bar style
     SystemChrome.setSystemUIOverlayStyle(
-      const SystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
         statusBarBrightness: Brightness.light,
       ),
     );
@@ -242,7 +242,7 @@ class AuthStateHandler extends StatelessWidget {
       return const DashboardScreen();
     } else {
       // Pas d'utilisateur connecté → Page de connexion
-      return const LoginScreen();
+      return const IOSLoginScreen();
     }
   }
 }

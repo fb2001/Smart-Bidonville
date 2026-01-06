@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     // Set status bar to transparent
     SystemChrome.setSystemUIOverlayStyle(
-      const SystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
       ),
@@ -127,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen>
                             color: Theme.of(context)
                                 .colorScheme
                                 .primary
-                                .withOpacity(0.3),
+                                .withValues(alpha: 0.3),
                             blurRadius: 20,
                             spreadRadius: 5,
                           ),
@@ -168,7 +168,7 @@ class _SplashScreenState extends State<SplashScreen>
                                 color: Theme.of(context)
                                     .colorScheme
                                     .onSurface
-                                    .withOpacity(0.6),
+                                    .withValues(alpha: 0.6),
                               ),
                         ),
                       ],

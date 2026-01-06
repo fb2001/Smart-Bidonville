@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/models/fan_mode.dart';
+import '../../../shared/widgets/ios_card.dart';
+import '../../../shared/theme/ios_theme.dart';
 import '../viewmodel/dashboard_provider.dart';
 
 class ModeSwitchCard extends StatelessWidget {
-  const ModeSwitchCard({Key? key}) : super(key: key);
+  const ModeSwitchCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,90 +16,111 @@ class ModeSwitchCard extends StatelessWidget {
       builder: (context, provider, _) {
         final currentMode = provider.state.fanStatus?.mode ?? FanMode.manual;
 
-        return Card(
-          elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Control Mode',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _ModeButton(
-                        mode: FanMode.manual,
-                        isSelected: currentMode.isManual,
-                        onTap: () => provider.setMode(FanMode.manual),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _ModeButton(
-                        mode: FanMode.auto,
-                        isSelected: currentMode.isAuto,
-                        onTap: () => provider.setMode(FanMode.auto),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-class _ModeButton extends StatelessWidget {
-  final FanMode mode;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  const _ModeButton({
-    required this.mode,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: isSelected ? Colors.blueAccent : Colors.grey.shade800,
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
+        return IOSCard(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(
-                mode.isAuto ? Icons.autorenew : Icons.touch_app,
-                color: isSelected ? Colors.white : Colors.grey.shade500,
-                size: 32,
+              Row(
+                children: [
+                  Icon(
+                    Icons.settings_rounded,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(width: IOSTheme.spacing8),
+                  Text(
+                    'Control Mode',
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                ],
               ),
-              const SizedBox(height: 8),
-              Text(
-                mode.displayName,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isSelected ? Colors.white : Colors.grey.shade500,
+              const SizedBox(height: IOSTheme.spacing16),
+
+              // iOS-style segmented control
+              Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? IOSTheme.tertiaryBackgroundDark
+                      : IOSTheme.secondaryBackgroundLight,
+                  borderRadius: BorderRadius.circular(IOSTheme.radiusSmall),
+                ),
+                child: CupertinoSegmentedControl<FanMode>(
+                  children: {
+                    FanMode.manual: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: IOSTheme.spacing16,
+                        vertical: IOSTheme.spacing12,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.touch_app_rounded,
+                            size: 18,
+                            color: currentMode.isManual
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.onSurface,
+                          ),
+                          const SizedBox(width: IOSTheme.spacing8),
+                          Text(
+                            'Manual',
+                            style: TextStyle(
+                              color: currentMode.isManual
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    FanMode.auto: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: IOSTheme.spacing16,
+                        vertical: IOSTheme.spacing12,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.autorenew_rounded,
+                            size: 18,
+                            color: currentMode.isAuto
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.onSurface,
+                          ),
+                          const SizedBox(width: IOSTheme.spacing8),
+                          Text(
+                            'Auto',
+                            style: TextStyle(
+                              color: currentMode.isAuto
+                                  ? Colors.white
+                                  : Theme.of(context).colorScheme.onSurface,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  },
+                  groupValue: currentMode,
+                  onValueChanged: (FanMode? value) {
+                    if (value != null) {
+                      HapticFeedback.selectionClick();
+                      provider.setMode(value);
+                    }
+                  },
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                  unselectedColor: Colors.transparent,
+                  borderColor: Colors.transparent,
+                  pressedColor: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withOpacity(0.2),
                 ),
               ),
             ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
