@@ -51,6 +51,9 @@ dependencies:
   # Persistent storage for ESP32 IP
   shared_preferences: ^2.2.2
 
+  # QR Code scanner for device pairing
+  mobile_scanner: ^5.2.3
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8

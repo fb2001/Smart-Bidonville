@@ -32,21 +32,11 @@
 				<string>com.googleusercontent.apps.709314346120-tlcjsamk0j3r0j152fi4tjeuh6444k0n</string>
 			</array>
 		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string></string>
-		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>GIDClientID</key>
 	<string>709314346120-tlcjsamk0j3r0j152fi4tjeuh6444k0n.apps.googleusercontent.com</string>
-	<key>Google</key>
-	<string>com.googleusercontent.apps.709314346120-tlcjsamk0j3r0j152fi4tjeuh6444k0n</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
@@ -68,5 +58,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera access is required to scan QR code for ESP32 device pairing</string>
 </dict>
 </plist>

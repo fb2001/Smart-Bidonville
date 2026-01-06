@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../core/models/device_credentials.dart';
+import 'qr_scanner_screen.dart';
 
 class IpConfigDialog extends StatefulWidget {
   final String? currentIp;
@@ -50,7 +52,34 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
       return;
     }
 
-    Navigator.of(context).pop(ip);
+    // Return DeviceCredentials with IP but no token (manual entry)
+    final credentials = DeviceCredentials(
+      ipAddress: ip,
+      authToken: '', // No token for manual entry
+    );
+    Navigator.of(context).pop(credentials);
+  }
+
+  Future<void> _handleQrScan() async {
+    try {
+      final credentials = await Navigator.of(context).push<DeviceCredentials>(
+        MaterialPageRoute(
+          builder: (context) => const QrScannerScreen(),
+          fullscreenDialog: true,
+        ),
+      );
+
+      if (credentials != null && mounted) {
+        // Return the scanned credentials
+        Navigator.of(context).pop(credentials);
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _errorMessage = 'QR scan failed: ${e.toString()}';
+        });
+      }
+    }
   }
 
   @override
@@ -65,13 +94,52 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
-            'Enter the IP address of your TTGO T-Display ESP32 device:',
-            style: TextStyle(fontSize: 14),
+            'Connect to your TTGO T-Display ESP32:',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
+          const SizedBox(height: 20),
+
+          // QR Scan Button
+          OutlinedButton.icon(
+            onPressed: _handleQrScan,
+            icon: const Icon(Icons.qr_code_scanner),
+            label: const Text('Scan QR Code (Secure)'),
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+            ),
+          ),
+
           const SizedBox(height: 16),
+
+          // Divider with "OR"
+          Row(
+            children: [
+              const Expanded(child: Divider()),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  'OR',
+                  style: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+              const Expanded(child: Divider()),
+            ],
+          ),
+
+          const SizedBox(height: 16),
+
+          // Manual IP Entry
+          const Text(
+            'Enter IP address manually:',
+            style: TextStyle(fontSize: 12),
+          ),
+          const SizedBox(height: 8),
           TextField(
             controller: _controller,
             keyboardType: TextInputType.number,
@@ -79,7 +147,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
               labelText: 'IP Address',
               hintText: '192.168.1.100',
               errorText: _errorMessage,
-              prefixIcon: const Icon(Icons.network_check),
+              prefixIcon: const Icon(Icons.edit),
               border: const OutlineInputBorder(),
             ),
             onChanged: (_) {
@@ -92,13 +160,21 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
             onSubmitted: (_) => _handleSubmit(),
           ),
           const SizedBox(height: 12),
-          Text(
-            'Tip: Check your router\'s DHCP table or ESP32 serial monitor',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey.shade500,
-              fontStyle: FontStyle.italic,
-            ),
+          Row(
+            children: [
+              Icon(Icons.info_outline, size: 14, color: Colors.grey.shade500),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  'Manual entry is less secure - QR code is recommended',
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade500,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -117,8 +193,8 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
 }
 
 // Helper function to show dialog
-Future<String?> showIpConfigDialog(BuildContext context, {String? currentIp}) {
-  return showDialog<String>(
+Future<DeviceCredentials?> showIpConfigDialog(BuildContext context, {String? currentIp}) {
+  return showDialog<DeviceCredentials>(
     context: context,
     barrierDismissible: false,
     builder: (context) => IpConfigDialog(currentIp: currentIp),

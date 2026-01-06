@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/api/fan_api_service.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../core/config/esp32_config.dart';
+import '../../../core/models/device_credentials.dart';
 import '../../../core/models/fan_mode.dart';
 import '../../../core/models/fan_speed.dart';
 import '../../../core/models/temperature_thresholds.dart';
@@ -155,6 +156,14 @@ class DashboardProvider extends ChangeNotifier {
   Future<void> setIpAddress(String ip) async {
     await _config.setIpAddress(ip);
     _currentIp = ip;
+    await refreshData();
+    startPolling();
+  }
+
+  // === Credentials Configuration (with security token) ===
+  Future<void> setCredentials(DeviceCredentials credentials) async {
+    await _config.setCredentials(credentials);
+    _currentIp = credentials.ipAddress;
     await refreshData();
     startPolling();
   }

@@ -17,12 +17,30 @@ class FanApiService {
       : _config = config ?? Esp32Config(),
         _client = client ?? http.Client();
 
+  /// Build headers with auth token if available
+  Future<Map<String, String>> _buildHeaders({bool includeContentType = false}) async {
+    final headers = <String, String>{};
+
+    if (includeContentType) {
+      headers['Content-Type'] = 'application/json';
+    }
+
+    // Add Authorization header if token exists
+    final authToken = await _config.getAuthToken();
+    if (authToken != null && authToken.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $authToken';
+    }
+
+    return headers;
+  }
+
   // === GET /mode ===
   Future<FanMode> getMode(String ip) async {
     try {
       final url = Uri.parse('${_config.getBaseUrl(ip)}/mode');
+      final headers = await _buildHeaders();
       final response = await _client
-          .get(url)
+          .get(url, headers: headers)
           .timeout(_config.timeout);
 
       if (response.statusCode == 200) {
@@ -48,10 +66,11 @@ class FanApiService {
   Future<FanMode> setMode(String ip, FanMode mode) async {
     try {
       final url = Uri.parse('${_config.getBaseUrl(ip)}/mode');
+      final headers = await _buildHeaders(includeContentType: true);
       final response = await _client
           .put(
             url,
-            headers: {'Content-Type': 'application/json'},
+            headers: headers,
             body: jsonEncode({'mode': mode.toApiString()}),
           )
           .timeout(_config.timeout);
@@ -77,8 +96,9 @@ class FanApiService {
   Future<FanStatus> getFanStatus(String ip) async {
     try {
       final url = Uri.parse('${_config.getBaseUrl(ip)}/fan/status');
+      final headers = await _buildHeaders();
       final response = await _client
-          .get(url)
+          .get(url, headers: headers)
           .timeout(_config.timeout);
 
       if (response.statusCode == 200) {
@@ -105,10 +125,11 @@ class FanApiService {
     try {
       final color = RgbColor.fromSpeed(speed); // Automatic color mapping
       final url = Uri.parse('${_config.getBaseUrl(ip)}/fan/manual');
+      final headers = await _buildHeaders(includeContentType: true);
       final response = await _client
           .put(
             url,
-            headers: {'Content-Type': 'application/json'},
+            headers: headers,
             body: jsonEncode({
               'speed': speed.toApiString(),
               'color': color.toApiString(),
@@ -136,10 +157,11 @@ class FanApiService {
 
     try {
       final url = Uri.parse('${_config.getBaseUrl(ip)}/fan/threshold');
+      final headers = await _buildHeaders(includeContentType: true);
       final response = await _client
           .put(
             url,
-            headers: {'Content-Type': 'application/json'},
+            headers: headers,
             body: jsonEncode(thresholds.toJson()),
           )
           .timeout(_config.timeout);
@@ -160,8 +182,9 @@ class FanApiService {
   Future<double> getTemperature(String ip) async {
     try {
       final url = Uri.parse('${_config.getBaseUrl(ip)}/temperature');
+      final headers = await _buildHeaders();
       final response = await _client
-          .get(url)
+          .get(url, headers: headers)
           .timeout(_config.timeout);
 
       if (response.statusCode == 200) {

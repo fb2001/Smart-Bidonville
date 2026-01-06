@@ -37,9 +37,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final config = Esp32Config();
     final isConfigured = await config.isConfigured();
     if (!isConfigured && mounted) {
-      final ip = await showIpConfigDialog(context);
-      if (ip != null) {
-        await provider.setIpAddress(ip);
+      final credentials = await showIpConfigDialog(context);
+      if (credentials != null) {
+        await provider.setCredentials(credentials);
       }
     }
   }
@@ -57,10 +57,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Future<void> _handleIpReconfigure() async {
     final currentIp = await Esp32Config().getIpAddress();
-    final newIp = await showIpConfigDialog(context, currentIp: currentIp);
+    final newCredentials = await showIpConfigDialog(context, currentIp: currentIp);
 
-    if (newIp != null && mounted) {
-      await context.read<DashboardProvider>().setIpAddress(newIp);
+    if (newCredentials != null && mounted) {
+      await context.read<DashboardProvider>().setCredentials(newCredentials);
     }
   }
 
