@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../../../core/models/fan_speed.dart';
-import '../../../core/models/rgb_color.dart';
-import '../../../shared/widgets/ios_card.dart';
-import '../../../shared/theme/ios_theme.dart';
+import '../../../shared/theme/app_theme.dart';
+import '../../../shared/widgets/glass_card.dart';
+import '../../../shared/widgets/app_button.dart';
 import '../viewmodel/dashboard_provider.dart';
 
+/// Manual control card matching Figma design
+/// Speed selector with Slow/Medium/Fast options using asset icons
 class ManualControlCard extends StatefulWidget {
-  const ManualControlCard({super.key});
+  const ManualControlCard({Key? key}) : super(key: key);
 
   @override
   State<ManualControlCard> createState() => _ManualControlCardState();
@@ -16,6 +17,7 @@ class ManualControlCard extends StatefulWidget {
 
 class _ManualControlCardState extends State<ManualControlCard> {
   FanSpeed _selectedSpeed = FanSpeed.slow;
+  bool _isApplying = false;
 
   @override
   Widget build(BuildContext context) {
@@ -23,222 +25,174 @@ class _ManualControlCardState extends State<ManualControlCard> {
       builder: (context, provider, _) {
         final isManualMode = provider.state.fanStatus?.mode.isManual ?? false;
 
-        return IOSCard(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.touch_app_rounded,
-                    size: 20,
-                    color: Theme.of(context).colorScheme.primary,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Status label
+            if (!isManualMode)
+              Padding(
+                padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+                child: Text(
+                  'Ventilateur manual mode',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: AppColors.textMuted,
                   ),
-                  const SizedBox(width: IOSTheme.spacing8),
-                  Text(
-                    'Manual Control',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  const Spacer(),
-                  if (!isManualMode)
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: IOSTheme.spacing12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: IOSTheme.dangerColor.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(IOSTheme.radiusSmall),
-                        border: Border.all(
-                          color: IOSTheme.dangerColor.withValues(alpha: 0.3),
-                          width: 1,
-                        ),
-                      ),
-                      child: Text(
-                        'DISABLED',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: IOSTheme.dangerColor,
-                            ),
-                      ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: IOSTheme.spacing16),
-
-              // Speed selector
-              Column(
-                children: FanSpeed.values.map((speed) {
-                  return _SpeedSelectionTile(
-                    speed: speed,
-                    isSelected: _selectedSpeed == speed,
-                    isEnabled: isManualMode,
-                    onSelect: (selected) {
-                      HapticFeedback.selectionClick();
-                      setState(() {
-                        _selectedSpeed = selected;
-                      });
-                    },
-                  );
-                }).toList(),
+                ),
               ),
 
-              const SizedBox(height: IOSTheme.spacing16),
-
-              // Apply button
-              IOSButton(
-                text: 'Apply Speed',
-                onPressed: isManualMode
-                    ? () async {
-                        final success = await provider.setManualSpeed(_selectedSpeed);
-                        if (success && context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  'Fan speed set to ${_selectedSpeed.displayName}'),
-                              backgroundColor: IOSTheme.accentColor,
-                              behavior: SnackBarBehavior.floating,
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(IOSTheme.radiusMedium),
-                              ),
-                              margin: const EdgeInsets.all(IOSTheme.spacing16),
-                            ),
-                          );
-                        }
-                      }
-                    : null,
-                isPrimary: true,
-                icon: Icons.check_circle_rounded,
+            // Speed options
+            ...FanSpeed.values.map((speed) => Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.sm),
+              child: _SpeedOptionTile(
+                speed: speed,
+                isSelected: _selectedSpeed == speed,
+                isEnabled: isManualMode,
+                onTap: () {
+                  setState(() {
+                    _selectedSpeed = speed;
+                  });
+                },
               ),
-            ],
-          ),
+            )),
+
+            const SizedBox(height: AppSpacing.md),
+
+            // Apply button (hidden in auto mode per Figma)
+            if (isManualMode)
+              PrimaryButton(
+                text: 'Save',
+                isLoading: _isApplying,
+                onPressed: () async {
+                  setState(() => _isApplying = true);
+                  final success = await provider.setManualSpeed(_selectedSpeed);
+                  setState(() => _isApplying = false);
+
+                  if (success && context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Fan speed set to ${_selectedSpeed.displayName}'),
+                        backgroundColor: AppColors.success,
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  }
+                },
+              ),
+          ],
         );
       },
     );
   }
 }
 
-class _SpeedSelectionTile extends StatelessWidget {
+class _SpeedOptionTile extends StatelessWidget {
   final FanSpeed speed;
   final bool isSelected;
   final bool isEnabled;
-  final ValueChanged<FanSpeed> onSelect;
+  final VoidCallback onTap;
 
-  const _SpeedSelectionTile({
+  const _SpeedOptionTile({
     required this.speed,
     required this.isSelected,
     required this.isEnabled,
-    required this.onSelect,
+    required this.onTap,
   });
+
+  String get _iconAsset {
+    switch (speed) {
+      case FanSpeed.slow:
+        return 'assets/icons8-escargot-50.png';
+      case FanSpeed.medium:
+        return 'assets/icons8-vitesse-50.png';
+      case FanSpeed.fast:
+        return 'assets/icons8-vitesse-maximum-50.png';
+    }
+  }
+
+  Color get _speedColor {
+    switch (speed) {
+      case FanSpeed.slow:
+        return AppColors.speedSlow;
+      case FanSpeed.medium:
+        return AppColors.speedMedium;
+      case FanSpeed.fast:
+        return AppColors.speedFast;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final color = RgbColor.fromSpeed(speed);
-    final brightness = Theme.of(context).brightness;
-    final bgColor = brightness == Brightness.dark
-        ? IOSTheme.tertiaryBackgroundDark
-        : IOSTheme.secondaryBackgroundLight;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: IOSTheme.spacing8),
-      child: Opacity(
-        opacity: isEnabled ? 1.0 : 0.5,
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: isEnabled ? () => onSelect(speed) : null,
-            borderRadius: BorderRadius.circular(IOSTheme.radiusMedium),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: IOSTheme.spacing16,
-                vertical: IOSTheme.spacing12,
-              ),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.1)
-                    : bgColor,
-                borderRadius: BorderRadius.circular(IOSTheme.radiusMedium),
-                border: Border.all(
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.transparent,
-                  width: 2,
+    return Opacity(
+      opacity: isEnabled ? 1.0 : 0.5,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: isEnabled ? onTap : null,
+          borderRadius: AppRadius.borderRadiusMd,
+          child: SimpleGlassCard(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md,
+              vertical: AppSpacing.sm,
+            ),
+            backgroundColor: isSelected
+                ? AppColors.glassSurface
+                : Colors.transparent,
+            child: Row(
+              children: [
+                // Speed icon from assets
+                Container(
+                  width: 40,
+                  height: 40,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? _speedColor.withOpacity(0.2)
+                        : AppColors.glassSurface,
+                    borderRadius: AppRadius.borderRadiusSm,
+                  ),
+                  child: Image.asset(
+                    _iconAsset,
+                    color: isSelected ? _speedColor : AppColors.textMuted,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(
+                        Icons.speed,
+                        color: isSelected ? _speedColor : AppColors.textMuted,
+                        size: 24,
+                      );
+                    },
+                  ),
                 ),
-              ),
-              child: Row(
-                children: [
-                  // Selection indicator
+                const SizedBox(width: AppSpacing.md),
+                // Speed label
+                Expanded(
+                  child: Text(
+                    speed.displayName,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                      color: isSelected
+                          ? AppColors.textPrimary
+                          : AppColors.textSecondary,
+                    ),
+                  ),
+                ),
+                // Selection indicator
+                if (isSelected)
                   Container(
                     width: 24,
                     height: 24,
                     decoration: BoxDecoration(
+                      color: _speedColor,
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withValues(alpha: 0.3),
-                        width: 2,
-                      ),
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Colors.transparent,
                     ),
-                    child: isSelected
-                        ? const Icon(
-                            Icons.check,
-                            size: 16,
-                            color: Colors.white,
-                          )
-                        : null,
-                  ),
-                  const SizedBox(width: IOSTheme.spacing12),
-
-                  // Color indicator
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: BoxDecoration(
-                      color: color.toColor(),
-                      borderRadius: BorderRadius.circular(IOSTheme.radiusSmall),
-                      boxShadow: [
-                        BoxShadow(
-                          color: color.toColor().withValues(alpha: 0.3),
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                        ),
-                      ],
+                    child: const Icon(
+                      Icons.check,
+                      color: Colors.white,
+                      size: 16,
                     ),
                   ),
-                  const SizedBox(width: IOSTheme.spacing12),
-
-                  // Speed name
-                  Expanded(
-                    child: Text(
-                      speed.displayName,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            fontWeight:
-                                isSelected ? FontWeight.w600 : FontWeight.normal,
-                          ),
-                    ),
-                  ),
-
-                  // RGB value
-                  Text(
-                    'RGB(${color.red},${color.green},${color.blue})',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.5),
-                          fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                ],
-              ),
+              ],
             ),
           ),
         ),

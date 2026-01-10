@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../../core/models/device_credentials.dart';
-import '../theme/ios_theme.dart';
+import '../theme/app_theme.dart';
+import 'app_button.dart';
+import 'app_text_field.dart';
+import 'glass_card.dart';
 import 'qr_scanner_screen.dart';
 
 class IpConfigDialog extends StatefulWidget {
@@ -30,7 +32,6 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
   }
 
   bool _validateIp(String ip) {
-    // Basic IP validation regex
     final ipRegex = RegExp(
       r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
     );
@@ -54,16 +55,14 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
       return;
     }
 
-    // Return DeviceCredentials with IP but no token (manual entry)
     final credentials = DeviceCredentials(
       ipAddress: ip,
-      authToken: '', // No token for manual entry
+      authToken: '',
     );
     Navigator.of(context).pop(credentials);
   }
 
   Future<void> _handleQrScan() async {
-    HapticFeedback.selectionClick();
     try {
       final credentials = await Navigator.of(context).push<DeviceCredentials>(
         MaterialPageRoute(
@@ -73,7 +72,6 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
       );
 
       if (credentials != null && mounted) {
-        // Return the scanned credentials
         Navigator.of(context).pop(credentials);
       }
     } catch (e) {
@@ -87,118 +85,168 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(IOSTheme.radiusLarge),
-      ),
-      title: Row(
-        children: [
-          Icon(Icons.router_rounded, color: Theme.of(context).colorScheme.primary),
-          const SizedBox(width: IOSTheme.spacing12),
-          const Text('ESP32 Configuration'),
-        ],
-      ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const Text(
-            'Connect to your TTGO T-Display ESP32:',
-            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-          ),
-          const SizedBox(height: 20),
-
-          // QR Scan Button
-          OutlinedButton.icon(
-            onPressed: _handleQrScan,
-            icon: const Icon(Icons.qr_code_scanner),
-            label: const Text('Scan QR Code (Secure)'),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Divider with "OR"
-          Row(
-            children: [
-              const Expanded(child: Divider()),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Text(
-                  'OR',
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: 12,
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      child: SimpleGlassCard(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Header
+            Row(
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.2),
+                    borderRadius: AppRadius.borderRadiusSm,
+                  ),
+                  child: const Icon(
+                    Icons.router,
+                    color: AppColors.primary,
+                    size: 24,
                   ),
                 ),
-              ),
-              const Expanded(child: Divider()),
-            ],
-          ),
+                const SizedBox(width: AppSpacing.md),
+                Text(
+                  'ESP32 Configuration',
+                  style: AppTypography.titleLarge,
+                ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.lg),
 
-          const SizedBox(height: 16),
+            Text(
+              'Connect to your TTGO T-Display ESP32:',
+              style: AppTypography.bodyMedium,
+            ),
+            const SizedBox(height: AppSpacing.lg),
 
-          // Manual IP Entry
-          const Text(
-            'Enter IP address manually:',
-            style: TextStyle(fontSize: 12),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _controller,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            // QR Scan Button
+            SecondaryButton(
+              text: 'Scan QR Code (Secure)',
+              icon: Icons.qr_code_scanner,
+              onPressed: _handleQrScan,
+            ),
+
+            const SizedBox(height: AppSpacing.md),
+
+            // Divider with "OR"
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    height: 1,
+                    color: AppColors.glassBorder,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                  child: Text(
+                    'OR',
+                    style: TextStyle(
+                      color: AppColors.textMuted,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: 1,
+                    color: AppColors.glassBorder,
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: AppSpacing.md),
+
+            // Manual IP Entry
+            Text(
+              'Enter IP address manually:',
+              style: AppTypography.labelMedium,
+            ),
+            const SizedBox(height: AppSpacing.sm),
+
+            AppTextField(
+              controller: _controller,
               labelText: 'IP Address',
               hintText: '192.168.1.100',
-              errorText: _errorMessage,
-              prefixIcon: const Icon(Icons.edit),
-              border: const OutlineInputBorder(),
+              keyboardType: TextInputType.number,
+              suffixIcon: Icons.edit,
+              onChanged: (_) {
+                if (_errorMessage != null) {
+                  setState(() {
+                    _errorMessage = null;
+                  });
+                }
+              },
             ),
-            onChanged: (_) {
-              if (_errorMessage != null) {
-                setState(() {
-                  _errorMessage = null;
-                });
-              }
-            },
-            onSubmitted: (_) => _handleSubmit(),
-          ),
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              Icon(Icons.info_outline, size: 14, color: Colors.grey.shade500),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  'Manual entry is less secure - QR code is recommended',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey.shade500,
-                    fontStyle: FontStyle.italic,
-                  ),
+
+            if (_errorMessage != null) ...[
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                _errorMessage!,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.error,
                 ),
               ),
             ],
-          ),
-        ],
+
+            const SizedBox(height: AppSpacing.sm),
+
+            // Info text
+            Row(
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 14,
+                  color: AppColors.textMuted,
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Expanded(
+                  child: Text(
+                    'Manual entry is less secure - QR code is recommended',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: AppColors.textMuted,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: AppSpacing.lg),
+
+            // Actions
+            Row(
+              children: [
+                Expanded(
+                  child: SecondaryButton(
+                    text: 'Cancel',
+                    onPressed: () => Navigator.of(context).pop(),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.md),
+                Expanded(
+                  child: PrimaryButton(
+                    text: 'Connect',
+                    onPressed: _handleSubmit,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _handleSubmit,
-          child: const Text('Connect'),
-        ),
-      ],
     );
   }
 }
 
-// Helper function to show dialog
 Future<DeviceCredentials?> showIpConfigDialog(BuildContext context, {String? currentIp}) {
   return showDialog<DeviceCredentials>(
     context: context,

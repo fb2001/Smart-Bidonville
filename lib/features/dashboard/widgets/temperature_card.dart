@@ -1,77 +1,94 @@
 import 'package:flutter/material.dart';
-import '../../../shared/widgets/ios_card.dart';
-import '../../../shared/theme/ios_theme.dart';
+import '../../../shared/theme/app_theme.dart';
+import '../../../shared/widgets/glass_card.dart';
 
+/// Temperature display card matching Figma design
+/// Shows temperature in both Celsius and Fahrenheit
 class TemperatureCard extends StatelessWidget {
   final double temperature;
 
-  const TemperatureCard({super.key, required this.temperature});
+  const TemperatureCard({Key? key, required this.temperature}) : super(key: key);
 
-  Color _getTemperatureColor() {
-    if (temperature < 20) return const Color(0xFF007AFF); // iOS Blue
-    if (temperature < 25) return const Color(0xFF34C759); // iOS Green
-    if (temperature < 30) return const Color(0xFFFF9500); // iOS Orange
-    return const Color(0xFFFF3B30); // iOS Red
-  }
-
-  IconData _getTemperatureIcon() {
-    if (temperature < 20) return Icons.ac_unit_rounded;
-    if (temperature < 30) return Icons.thermostat_rounded;
-    return Icons.local_fire_department_rounded;
-  }
+  double get temperatureFahrenheit => (temperature * 9 / 5) + 32;
 
   @override
   Widget build(BuildContext context) {
-    final color = _getTemperatureColor();
-
-    return IOSCard(
+    return SimpleGlassCard(
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          // Icon with circle background
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(IOSTheme.radiusMedium),
-            ),
-            child: Icon(
-              _getTemperatureIcon(),
-              size: 32,
-              color: color,
-            ),
+          // Celsius
+          _TemperatureUnit(
+            value: temperature,
+            unit: 'Degrees celsius',
+            suffix: '°C',
           ),
-
-          const SizedBox(width: IOSTheme.spacing16),
-
-          // Temperature info
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Current Temperature',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.6),
-                      ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  '${temperature.toStringAsFixed(1)}°C',
-                  style: Theme.of(context).textTheme.displayMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                        height: 1.0,
-                      ),
-                ),
-              ],
-            ),
+          // Divider
+          Container(
+            height: 60,
+            width: 1,
+            color: AppColors.glassBorder,
+          ),
+          // Fahrenheit
+          _TemperatureUnit(
+            value: temperatureFahrenheit,
+            unit: 'Fahrenait',
+            suffix: '°',
           ),
         ],
       ),
+    );
+  }
+}
+
+class _TemperatureUnit extends StatelessWidget {
+  final double value;
+  final String unit;
+  final String suffix;
+
+  const _TemperatureUnit({
+    required this.value,
+    required this.unit,
+    required this.suffix,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: value.toStringAsFixed(0),
+                style: const TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              TextSpan(
+                text: suffix,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
+          unit,
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppColors.textMuted,
+          ),
+        ),
+      ],
     );
   }
 }

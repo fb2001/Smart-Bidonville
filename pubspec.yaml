@@ -85,6 +85,9 @@ flutter:
     - assets/background_login.jpg
     - assets/logo_app.jpg
     - assets/google_logo.png
+    - assets/icons8-escargot-50.png
+    - assets/icons8-vitesse-50.png
+    - assets/icons8-vitesse-maximum-50.png
   generate: true
 
 

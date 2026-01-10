@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../shared/theme/app_theme.dart';
 import '../../../shared/widgets/ip_config_dialog.dart';
+import '../../../shared/widgets/glass_card.dart';
+import '../../../shared/widgets/app_button.dart';
 import '../../../core/config/esp32_config.dart';
 import '../viewmodel/dashboard_provider.dart';
 import '../widgets/temperature_card.dart';
@@ -31,7 +34,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final provider = context.read<DashboardProvider>();
     await provider.initialize();
 
-    // Show IP config dialog if not configured
     if (!mounted) return;
 
     final config = Esp32Config();
@@ -67,171 +69,243 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Smart Bidonville'),
-        actions: [
-          Consumer<DashboardProvider>(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              const Color(0xFF3D3520), // Dark amber
+              AppColors.backgroundDark,
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: Consumer<DashboardProvider>(
             builder: (context, provider, _) {
-              return Row(
+              final state = provider.state;
+
+              return Column(
                 children: [
-                  if (provider.state.isPolling)
-                    const Padding(
-                      padding: EdgeInsets.only(right: 12.0),
-                      child: SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                        ),
-                      ),
-                    ),
-                  IconButton(
-                    icon: const Icon(Icons.settings_ethernet),
-                    onPressed: _handleIpReconfigure,
-                    tooltip: 'Configure ESP32 IP',
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () => provider.refreshData(),
-                    tooltip: 'Refresh',
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.logout),
-                    onPressed: _handleSignOut,
-                    tooltip: 'Logout',
+                  // Top App Bar
+                  _buildAppBar(provider),
+
+                  // Content
+                  Expanded(
+                    child: _buildContent(provider, state),
                   ),
                 ],
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAppBar(DashboardProvider provider) {
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      child: Row(
+        children: [
+          // Connection status indicator
+          if (provider.state.isPolling)
+            Container(
+              width: 8,
+              height: 8,
+              decoration: const BoxDecoration(
+                color: AppColors.success,
+                shape: BoxShape.circle,
+              ),
+            ),
+          const Spacer(),
+          // Settings button
+          GlassIconButton(
+            icon: Icons.settings_ethernet,
+            onPressed: _handleIpReconfigure,
+            size: 40,
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          // Refresh button
+          GlassIconButton(
+            icon: Icons.refresh,
+            onPressed: () => provider.refreshData(),
+            size: 40,
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          // Menu button
+          GlassIconButton(
+            icon: Icons.menu,
+            onPressed: _handleSignOut,
+            size: 40,
+          ),
         ],
       ),
-      body: Consumer<DashboardProvider>(
-        builder: (context, provider, _) {
-          final state = provider.state;
+    );
+  }
 
-          // Error state
-          if (state.hasError && state.errorMessage != null) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                      size: 64,
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Connection Error',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      state.errorMessage!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade400,
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: () => provider.refreshData(),
-                      icon: const Icon(Icons.refresh),
-                      label: const Text('Retry'),
-                    ),
-                    const SizedBox(height: 12),
-                    TextButton(
-                      onPressed: _handleIpReconfigure,
-                      child: const Text('Change IP Address'),
-                    ),
-                  ],
-                ),
+  Widget _buildContent(DashboardProvider provider, state) {
+    // Error state
+    if (state.hasError && state.errorMessage != null) {
+      return _buildErrorState(provider, state.errorMessage!);
+    }
+
+    // Loading state
+    if (state.isLoading && !state.hasData) {
+      return _buildLoadingState();
+    }
+
+    // Data loaded
+    if (state.hasData) {
+      return _buildDataState(provider, state);
+    }
+
+    // Initial state
+    return _buildInitialState();
+  }
+
+  Widget _buildErrorState(DashboardProvider provider, String errorMessage) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: SimpleGlassCard(
+          padding: const EdgeInsets.all(AppSpacing.xl),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(
+                Icons.error_outline,
+                color: AppColors.error,
+                size: 64,
               ),
-            );
-          }
-
-          // Loading state
-          if (state.isLoading && !state.hasData) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Connecting to ESP32...'),
-                ],
+              const SizedBox(height: AppSpacing.md),
+              Text(
+                'Connection Error',
+                style: AppTypography.titleLarge,
               ),
-            );
-          }
-
-          // Data loaded
-          if (state.hasData) {
-            final fanStatus = state.fanStatus!;
-
-            return RefreshIndicator(
-              onRefresh: () => provider.refreshData(),
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    // Temperature display
-                    TemperatureCard(temperature: fanStatus.temperature),
-                    const SizedBox(height: 16),
-
-                    // Fan status indicator
-                    FanStatusIndicator(fanStatus: fanStatus),
-                    const SizedBox(height: 16),
-
-                    // Mode switch
-                    const ModeSwitchCard(),
-                    const SizedBox(height: 16),
-
-                    // Manual control (disabled in AUTO mode)
-                    const ManualControlCard(),
-                    const SizedBox(height: 16),
-
-                    // Auto threshold configuration (disabled in MANUAL mode)
-                    const AutoThresholdCard(),
-                    const SizedBox(height: 32),
-                  ],
-                ),
+              const SizedBox(height: AppSpacing.sm),
+              Text(
+                errorMessage,
+                textAlign: TextAlign.center,
+                style: AppTypography.bodyMedium,
               ),
-            );
-          }
+              const SizedBox(height: AppSpacing.lg),
+              PrimaryButton(
+                text: 'Retry',
+                icon: Icons.refresh,
+                onPressed: () => provider.refreshData(),
+                width: 160,
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              SecondaryButton(
+                text: 'Change IP',
+                onPressed: _handleIpReconfigure,
+                width: 160,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
-          // Initial state
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.router,
-                  size: 64,
-                  color: Colors.grey,
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'No ESP32 configured',
-                  style: TextStyle(fontSize: 18),
-                ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _handleIpReconfigure,
-                  child: const Text('Configure ESP32'),
-                ),
-              ],
+  Widget _buildLoadingState() {
+    return Center(
+      child: SimpleGlassCard(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const SizedBox(
+              width: 48,
+              height: 48,
+              child: CircularProgressIndicator(
+                color: AppColors.primary,
+                strokeWidth: 3,
+              ),
             ),
-          );
-        },
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              'Connecting to ESP32...',
+              style: AppTypography.bodyLarge,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDataState(DashboardProvider provider, state) {
+    final fanStatus = state.fanStatus!;
+
+    return RefreshIndicator(
+      onRefresh: () => provider.refreshData(),
+      color: AppColors.primary,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Temperature display
+            TemperatureCard(temperature: fanStatus.temperature),
+            const SizedBox(height: AppSpacing.md),
+
+            // Fan status with mode
+            FanStatusIndicator(fanStatus: fanStatus),
+            const SizedBox(height: AppSpacing.lg),
+
+            // "Set fan to:" section title
+            Text(
+              'Set fan to :',
+              style: AppTypography.titleLarge.copyWith(
+                color: AppColors.primary,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.md),
+
+            // Mode switch
+            const ModeSwitchCard(),
+            const SizedBox(height: AppSpacing.md),
+
+            // Conditional controls based on mode
+            if (fanStatus.mode.isManual)
+              const ManualControlCard()
+            else
+              const AutoThresholdCard(),
+
+            const SizedBox(height: AppSpacing.xxl),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInitialState() {
+    return Center(
+      child: SimpleGlassCard(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.router,
+              size: 64,
+              color: AppColors.textMuted,
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Text(
+              'No ESP32 configured',
+              style: AppTypography.titleLarge,
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            PrimaryButton(
+              text: 'Configure ESP32',
+              onPressed: _handleIpReconfigure,
+              width: 180,
+            ),
+          ],
+        ),
       ),
     );
   }
