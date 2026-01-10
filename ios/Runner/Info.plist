@@ -60,5 +60,12 @@
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Camera access is required to scan QR code for ESP32 device pairing</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoadsInLocalNetwork</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Local network access is required to communicate with your ESP32 device.</string>
 </dict>
 </plist>

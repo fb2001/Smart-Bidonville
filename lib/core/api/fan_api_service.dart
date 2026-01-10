@@ -8,6 +8,7 @@ import '../models/temperature_thresholds.dart';
 import '../models/rgb_color.dart';
 import '../config/esp32_config.dart';
 import 'api_exception.dart';
+import 'logging_http_client.dart';
 
 class FanApiService {
   final Esp32Config _config;
@@ -15,7 +16,9 @@ class FanApiService {
 
   FanApiService({Esp32Config? config, http.Client? client})
       : _config = config ?? Esp32Config(),
-        _client = client ?? http.Client();
+        _client = client ?? LoggingHttpClient(
+  redactAuthorization: false,
+);
 
   /// Build headers with auth token if available
   Future<Map<String, String>> _buildHeaders({bool includeContentType = false}) async {
