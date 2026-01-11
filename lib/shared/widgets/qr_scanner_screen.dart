@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../core/models/device_credentials.dart';
+import '../../l10n/app_localizations.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
@@ -43,10 +44,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         // Afficher l'erreur et permettre de réessayer
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('QR code invalide : ${e.toString()}'),
+            content: Text(l10n.qrInvalid(e.toString())),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 2),
           ),
@@ -61,9 +63,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scanner le QR Code ESP32'),
+        title: Text(l10n.qrScannerTitle),
         actions: [
           IconButton(
             icon: Icon(
@@ -75,12 +78,12 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
               });
               _controller.toggleTorch();
             },
-            tooltip: 'Activer/désactiver la lampe',
+            tooltip: l10n.toggleFlashlight,
           ),
           IconButton(
             icon: const Icon(Icons.flip_camera_ios),
             onPressed: () => _controller.switchCamera(),
-            tooltip: 'Changer de caméra',
+            tooltip: l10n.switchCamera,
           ),
         ],
       ),
@@ -124,10 +127,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                     color: Colors.white,
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'Scannez le QR code affiché sur votre ESP32',
+                  Text(
+                    l10n.qrScannerInstructionTitle,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -135,7 +138,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Assurez-vous que le QR code est clairement visible et bien éclairé',
+                    l10n.qrScannerInstructionSubtitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.7),

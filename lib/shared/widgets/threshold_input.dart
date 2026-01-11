@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/models/fan_speed.dart';
+import '../../l10n/app_localizations.dart';
+import '../localization/fan_localizations.dart';
 import '../theme/app_theme.dart';
 
 /// Threshold input widget for auto mode temperature settings
@@ -82,7 +84,7 @@ class ThresholdInput extends StatelessWidget {
             // Speed label
             Expanded(
               child: Text(
-                speedLevel.displayName,
+                speedLevel.localizedName(AppLocalizations.of(context)!),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,

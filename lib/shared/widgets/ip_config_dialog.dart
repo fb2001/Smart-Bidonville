@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/models/device_credentials.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 import 'app_button.dart';
 import 'glass_card.dart';
@@ -40,7 +41,8 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _errorMessage = 'Échec du scan QR : ${e.toString()}';
+          final l10n = AppLocalizations.of(context)!;
+          _errorMessage = l10n.qrScanFailed(e.toString());
         });
       }
     }
@@ -48,6 +50,8 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Dialog(
@@ -76,7 +80,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Text(
-                  'Configuration ESP32',
+                  l10n.esp32ConfigurationTitle,
                   style: AppTypography.titleLarge,
                 ),
               ],
@@ -84,13 +88,13 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
             const SizedBox(height: AppSpacing.lg),
 
             Text(
-              'Connectez-vous à votre TTGO T-Display ESP32 :',
+              l10n.esp32ConnectInstruction,
               style: AppTypography.bodyMedium,
             ),
             const SizedBox(height: AppSpacing.lg),
 
             PrimaryButton(
-              text: 'Scanner le QR Code',
+              text: l10n.scanQrCode,
               icon: Icons.qr_code_scanner,
               onPressed: _handleQrScan,
             ),
@@ -113,7 +117,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
               children: [
                 Expanded(
                   child: SecondaryButton(
-                    text: 'Fermer',
+                    text: l10n.close,
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
@@ -127,7 +131,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
   }
 }
 
-Future<DeviceCredentials?> showIpConfigDialog(BuildContext context, {String? currentIp}) {
+Future<DeviceCredentials?> showIpConfigDialog(BuildContext context) {
   return showDialog<DeviceCredentials>(
     context: context,
     barrierDismissible: false,

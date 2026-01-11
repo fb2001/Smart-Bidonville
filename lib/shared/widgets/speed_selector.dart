@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/models/fan_speed.dart';
+import '../../l10n/app_localizations.dart';
+import '../localization/fan_localizations.dart';
 import '../theme/app_theme.dart';
 
 /// Speed selector widget matching Figma design
@@ -122,7 +124,7 @@ class _SpeedOptionTile extends StatelessWidget {
                 // Speed label
                 Expanded(
                   child: Text(
-                    speed.displayName,
+                    speed.localizedName(AppLocalizations.of(context)!),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
@@ -197,7 +199,7 @@ class SpeedIndicatorChip extends StatelessWidget {
         border: Border.all(color: _speedColor, width: 1),
       ),
       child: Text(
-        speed.displayName,
+        speed.localizedName(AppLocalizations.of(context)!),
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
