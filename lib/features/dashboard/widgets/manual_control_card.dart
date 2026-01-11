@@ -28,12 +28,12 @@ class _ManualControlCardState extends State<ManualControlCard> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Status label
+            // Label de statut
             if (!isManualMode)
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                 child: Text(
-                  'Ventilateur manual mode',
+                  'Mode manuel du ventilateur',
                   style: TextStyle(
                     fontSize: 14,
                     color: AppColors.textMuted,
@@ -58,10 +58,10 @@ class _ManualControlCardState extends State<ManualControlCard> {
 
             const SizedBox(height: AppSpacing.md),
 
-            // Apply button (hidden in auto mode per Figma)
+            // Bouton d'application (caché en mode auto selon Figma)
             if (isManualMode)
               PrimaryButton(
-                text: 'Save',
+                text: 'Enregistrer',
                 isLoading: _isApplying,
                 onPressed: () async {
                   setState(() => _isApplying = true);
@@ -71,7 +71,7 @@ class _ManualControlCardState extends State<ManualControlCard> {
                   if (success && context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Fan speed set to ${_selectedSpeed.displayName}'),
+                        content: Text('Vitesse du ventilateur réglée sur ${_selectedSpeed.displayName}'),
                         backgroundColor: AppColors.success,
                         duration: const Duration(seconds: 2),
                       ),

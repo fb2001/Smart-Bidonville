@@ -5,9 +5,9 @@ enum FanMode {
   String get displayName {
     switch (this) {
       case FanMode.auto:
-        return 'Auto';
+        return 'Automatique';
       case FanMode.manual:
-        return 'Manual';
+        return 'Manuel';
     }
   }
 

@@ -70,14 +70,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              const Color(0xFF3D3520), // Dark amber
-              AppColors.backgroundDark,
-            ],
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/background_dashboard.png'),
+            fit: BoxFit.cover,
           ),
         ),
         child: SafeArea(
@@ -119,23 +115,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
           const Spacer(),
-          // Settings button
+          // Bouton de configuration
           GlassIconButton(
-            icon: Icons.settings_ethernet,
+            assetPath: 'assets/icons8-mode-portrait-50.png',
             onPressed: _handleIpReconfigure,
             size: 40,
           ),
           const SizedBox(width: AppSpacing.sm),
-          // Refresh button
+          // Bouton de déconnexion
           GlassIconButton(
-            icon: Icons.refresh,
-            onPressed: () => provider.refreshData(),
-            size: 40,
-          ),
-          const SizedBox(width: AppSpacing.sm),
-          // Menu button
-          GlassIconButton(
-            icon: Icons.menu,
+            assetPath: 'assets/icons8-sortie-50.png',
             onPressed: _handleSignOut,
             size: 40,
           ),
@@ -180,7 +169,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Connection Error',
+                'Erreur de connexion',
                 style: AppTypography.titleLarge,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -191,16 +180,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               PrimaryButton(
-                text: 'Retry',
-                icon: Icons.refresh,
+                text: 'Réessayer',
                 onPressed: () => provider.refreshData(),
-                width: 160,
               ),
               const SizedBox(height: AppSpacing.sm),
               SecondaryButton(
-                text: 'Change IP',
+                text: 'Rescanner QR Code',
                 onPressed: _handleIpReconfigure,
-                width: 160,
               ),
             ],
           ),
@@ -226,7 +212,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Connecting to ESP32...',
+              'Connexion à l\'ESP32...',
               style: AppTypography.bodyLarge,
             ),
           ],
@@ -255,11 +241,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             FanStatusIndicator(fanStatus: fanStatus),
             const SizedBox(height: AppSpacing.lg),
 
-            // "Set fan to:" section title
+            // Titre de section "Régler le ventilateur sur :"
             Text(
-              'Set fan to :',
+              'Régler le ventilateur sur :',
               style: AppTypography.titleLarge.copyWith(
-                color: AppColors.primary,
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: AppSpacing.md),
@@ -295,12 +281,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'No ESP32 configured',
+              'Aucun ESP32 configuré',
               style: AppTypography.titleLarge,
             ),
             const SizedBox(height: AppSpacing.lg),
             PrimaryButton(
-              text: 'Configure ESP32',
+              text: 'Configurer ESP32',
               onPressed: _handleIpReconfigure,
               width: 180,
             ),

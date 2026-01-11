@@ -128,10 +128,10 @@ class EmailTextField extends StatelessWidget {
       validator: validator ??
           (value) {
             if (value == null || value.isEmpty) {
-              return 'Email is required';
+              return 'Email requis';
             }
             if (!value.contains('@')) {
-              return 'Invalid email address';
+              return 'Adresse email invalide';
             }
             return null;
           },
@@ -165,7 +165,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   Widget build(BuildContext context) {
     return AppTextField(
       controller: widget.controller,
-      labelText: widget.labelText ?? 'Password',
+      labelText: widget.labelText ?? 'Mot de passe',
       obscureText: _obscureText,
       suffixIcon: _obscureText ? Icons.lock_outline : Icons.lock_open_outlined,
       onSuffixIconTap: () {
@@ -178,10 +178,10 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       validator: widget.validator ??
           (value) {
             if (value == null || value.isEmpty) {
-              return 'Password is required';
+              return 'Mot de passe requis';
             }
             if (value.length < 6) {
-              return 'Password must be at least 6 characters';
+              return 'Le mot de passe doit contenir au moins 6 caractères';
             }
             return null;
           },

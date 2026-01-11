@@ -3,8 +3,8 @@ import '../../../core/models/fan_status.dart';
 import '../../../shared/theme/app_theme.dart';
 import '../../../shared/widgets/glass_card.dart';
 
-/// Fan status indicator matching Figma design
-/// Shows current mode and speed ventilateur
+/// Indicateur d'état du ventilateur selon le design Figma
+/// Affiche le mode actuel et la vitesse du ventilateur
 class FanStatusIndicator extends StatelessWidget {
   final FanStatus fanStatus;
 
@@ -29,10 +29,10 @@ class FanStatusIndicator extends StatelessWidget {
             width: 1,
             color: AppColors.glassBorder,
           ),
-          // Speed display
+          // Affichage de la vitesse
           _StatusItem(
-            value: fanStatus.speed?.displayName ?? 'Off',
-            label: 'Speed ventilateur',
+            value: fanStatus.speed?.displayName ?? 'Arrêté',
+            label: 'Vitesse du ventilateur',
             valueColor: _getSpeedColor(),
           ),
         ],

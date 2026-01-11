@@ -36,9 +36,10 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
         ],
         supportedLocales: const [
-          Locale('en'),
           Locale('fr'),
+          Locale('en'),
         ],
+        locale: const Locale('fr'),
         home: const FirebaseInitializer(),
       ),
     );
@@ -109,13 +110,13 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Firebase Initialization Error',
+                    'Erreur d\'initialisation Firebase',
                     style: AppTypography.titleLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Text(
-                    _errorMessage ?? 'Unknown error',
+                    _errorMessage ?? 'Erreur inconnue',
                     style: AppTypography.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -128,7 +129,7 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
                       });
                       _initializeFirebase();
                     },
-                    child: const Text('Retry'),
+                    child: const Text('Réessayer'),
                   ),
                 ],
               ),
@@ -179,7 +180,7 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  'Initializing...',
+                  'Initialisation...',
                   style: AppTypography.bodyMedium,
                 ),
               ],

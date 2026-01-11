@@ -21,14 +21,14 @@ enum ApiExceptionType {
 class ApiExceptionFactory {
   static ApiException timeout() {
     return ApiException(
-      'ESP32 connection timeout. Please check if the device is powered on and connected to WiFi.',
+      'Délai de connexion ESP32 dépassé. Vérifiez que l\'appareil est allumé et connecté au WiFi.',
       ApiExceptionType.timeout,
     );
   }
 
   static ApiException networkError(dynamic error) {
     return ApiException(
-      'Cannot reach ESP32. Verify IP address and network connection.',
+      'Impossible de joindre l\'ESP32. Vérifiez l\'adresse IP et la connexion réseau.',
       ApiExceptionType.networkError,
       error,
     );
@@ -36,7 +36,7 @@ class ApiExceptionFactory {
 
   static ApiException invalidJson(dynamic error) {
     return ApiException(
-      'Invalid response from ESP32. The device may be malfunctioning.',
+      'Réponse invalide de l\'ESP32. L\'appareil peut être défectueux.',
       ApiExceptionType.invalidResponse,
       error,
     );
@@ -44,21 +44,21 @@ class ApiExceptionFactory {
 
   static ApiException notFound(String endpoint) {
     return ApiException(
-      'Endpoint not found: $endpoint. Please check ESP32 firmware version.',
+      'Point de terminaison introuvable : $endpoint. Vérifiez la version du firmware ESP32.',
       ApiExceptionType.notFound,
     );
   }
 
   static ApiException serverError(int statusCode, String? body) {
     return ApiException(
-      'ESP32 error (HTTP $statusCode): ${body ?? "Unknown error"}',
+      'Erreur ESP32 (HTTP $statusCode) : ${body ?? "Erreur inconnue"}',
       ApiExceptionType.serverError,
     );
   }
 
   static ApiException unknown(dynamic error) {
     return ApiException(
-      'Unexpected error: ${error.toString()}',
+      'Erreur inattendue : ${error.toString()}',
       ApiExceptionType.unknown,
       error,
     );

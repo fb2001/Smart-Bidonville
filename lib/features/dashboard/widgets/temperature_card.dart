@@ -21,10 +21,10 @@ class TemperatureCard extends StatelessWidget {
           // Celsius
           _TemperatureUnit(
             value: temperature,
-            unit: 'Degrees celsius',
+            unit: 'Degrés Celsius',
             suffix: '°C',
           ),
-          // Divider
+          // Séparateur
           Container(
             height: 60,
             width: 1,
@@ -33,8 +33,8 @@ class TemperatureCard extends StatelessWidget {
           // Fahrenheit
           _TemperatureUnit(
             value: temperatureFahrenheit,
-            unit: 'Fahrenait',
-            suffix: '°',
+            unit: 'Fahrenheit',
+            suffix: '°F',
           ),
         ],
       ),

@@ -51,11 +51,14 @@ class PrimaryButton extends StatelessWidget {
                     Icon(icon, size: 20),
                     const SizedBox(width: AppSpacing.sm),
                   ],
-                  Text(
-                    text,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                  Flexible(
+                    child: Text(
+                      text,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -113,11 +116,14 @@ class SecondaryButton extends StatelessWidget {
                     Icon(icon, size: 20),
                     const SizedBox(width: AppSpacing.sm),
                   ],
-                  Text(
-                    text,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                  Flexible(
+                    child: Text(
+                      text,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ],
@@ -129,18 +135,20 @@ class SecondaryButton extends StatelessWidget {
 
 /// Icon button with glass background
 class GlassIconButton extends StatelessWidget {
-  final IconData icon;
+  final IconData? icon;
+  final String? assetPath;
   final VoidCallback? onPressed;
   final double size;
   final Color? iconColor;
 
   const GlassIconButton({
     super.key,
-    required this.icon,
+    this.icon,
+    this.assetPath,
     this.onPressed,
     this.size = 48,
     this.iconColor,
-  });
+  }) : assert(icon != null || assetPath != null, 'Either icon or assetPath must be provided');
 
   @override
   Widget build(BuildContext context) {
@@ -157,11 +165,21 @@ class GlassIconButton extends StatelessWidget {
             shape: BoxShape.circle,
             border: Border.all(color: AppColors.glassBorder, width: 1),
           ),
-          child: Icon(
-            icon,
-            color: iconColor ?? AppColors.textPrimary,
-            size: size * 0.5,
-          ),
+          child: assetPath != null
+              ? Padding(
+                  padding: EdgeInsets.all(size * 0.2),
+                  child: Image.asset(
+                    assetPath!,
+                    color: iconColor ?? AppColors.textPrimary,
+                    width: size * 0.5,
+                    height: size * 0.5,
+                  ),
+                )
+              : Icon(
+                  icon,
+                  color: iconColor ?? AppColors.textPrimary,
+                  size: size * 0.5,
+                ),
         ),
       ),
     );

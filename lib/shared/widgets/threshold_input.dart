@@ -167,6 +167,7 @@ class _DegreeInputFieldState extends State<_DegreeInputField> {
               controller: _controller,
               enabled: widget.enabled,
               keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 16,
@@ -191,6 +192,7 @@ class _DegreeInputFieldState extends State<_DegreeInputField> {
                   widget.onChanged(parsed);
                 }
               },
+              onSubmitted: (_) => FocusScope.of(context).unfocus(),
             ),
           ),
           Container(

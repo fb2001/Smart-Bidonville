@@ -83,11 +83,14 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/background_login.jpg
+    - assets/background_dashboard.png
     - assets/logo_app.jpg
     - assets/google_logo.png
     - assets/icons8-escargot-50.png
     - assets/icons8-vitesse-50.png
     - assets/icons8-vitesse-maximum-50.png
+    - assets/icons8-sortie-50.png
+    - assets/icons8-mode-portrait-50.png
   generate: true
 
 

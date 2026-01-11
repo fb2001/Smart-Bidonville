@@ -43,10 +43,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
       }
     } catch (e) {
       if (mounted) {
-        // Show error and allow retry
+        // Afficher l'erreur et permettre de réessayer
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Invalid QR code: ${e.toString()}'),
+            content: Text('QR code invalide : ${e.toString()}'),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 2),
           ),
@@ -63,7 +63,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scan ESP32 QR Code'),
+        title: const Text('Scanner le QR Code ESP32'),
         actions: [
           IconButton(
             icon: Icon(
@@ -75,12 +75,12 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
               });
               _controller.toggleTorch();
             },
-            tooltip: 'Toggle flashlight',
+            tooltip: 'Activer/désactiver la lampe',
           ),
           IconButton(
             icon: const Icon(Icons.flip_camera_ios),
             onPressed: () => _controller.switchCamera(),
-            tooltip: 'Switch camera',
+            tooltip: 'Changer de caméra',
           ),
         ],
       ),
@@ -125,7 +125,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   ),
                   const SizedBox(height: 12),
                   const Text(
-                    'Scan the QR code displayed on your ESP32',
+                    'Scannez le QR code affiché sur votre ESP32',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white,
@@ -135,7 +135,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Make sure the QR code is clearly visible and well-lit',
+                    'Assurez-vous que le QR code est clairement visible et bien éclairé',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white.withValues(alpha: 0.7),

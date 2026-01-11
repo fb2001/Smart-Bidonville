@@ -6,11 +6,11 @@ enum FanSpeed {
   String get displayName {
     switch (this) {
       case FanSpeed.slow:
-        return 'Slow';
+        return 'Lent';
       case FanSpeed.medium:
-        return 'Medium';
+        return 'Moyen';
       case FanSpeed.fast:
-        return 'Fast';
+        return 'Rapide';
     }
   }
 

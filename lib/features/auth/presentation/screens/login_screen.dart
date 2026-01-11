@@ -203,29 +203,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: SafeArea(
           child: Column(
             children: [
-              // Top app bar with menu icon
-              Padding(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.glassSurface,
-                        borderRadius: AppRadius.borderRadiusSm,
-                      ),
-                      child: const Icon(
-                        Icons.menu,
-                        color: AppColors.textPrimary,
-                        size: 24,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
               // Branding section - SMART HOME
               Expanded(
                 flex: 4,
@@ -339,22 +316,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                             ),
 
-                            // Forgot password
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: _showForgotPasswordDialog,
-                                child: Text(
-                                  tr.forgotPassword,
-                                  style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 13,
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            const SizedBox(height: AppSpacing.md),
+                            const SizedBox(height: AppSpacing.lg),
 
                             // Login button
                             PrimaryButton(

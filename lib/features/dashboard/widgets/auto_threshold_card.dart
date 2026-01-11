@@ -88,7 +88,7 @@ class _AutoThresholdCardState extends State<AutoThresholdCard> {
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
-                          'Thresholds must satisfy: Slow < Medium < Fast',
+                          'Les seuils doivent respecter : Lent < Moyen < Rapide',
                           style: TextStyle(
                             fontSize: 12,
                             color: AppColors.warning,
@@ -100,9 +100,9 @@ class _AutoThresholdCardState extends State<AutoThresholdCard> {
                 ),
               ),
 
-            // Save button
+            // Bouton enregistrer
             PrimaryButton(
-              text: 'Save',
+              text: 'Enregistrer',
               isLoading: _isApplying,
               onPressed: (isAutoMode && _isValid)
                   ? () async {
@@ -120,7 +120,7 @@ class _AutoThresholdCardState extends State<AutoThresholdCard> {
                       if (success && context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Thresholds updated successfully'),
+                            content: Text('Seuils mis à jour avec succès'),
                             backgroundColor: AppColors.success,
                             duration: Duration(seconds: 2),
                           ),

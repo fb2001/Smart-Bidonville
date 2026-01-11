@@ -26,8 +26,8 @@ class AppColors {
   static const Color surfaceDark = Color(0xFF2A2A2A);
 
   // Glassmorphism surface
-  static const Color glassSurface = Color(0x40000000);
-  static const Color glassBorder = Color(0x30FFFFFF);
+  static const Color glassSurface = Color(0xB0000000); // 70% opacity
+  static const Color glassBorder = Color(0x50FFFFFF); // 30% opacity
 
   // Text colors
   static const Color textPrimary = Colors.white;

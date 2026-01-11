@@ -20,7 +20,7 @@ class ModeSwitchCard extends StatelessWidget {
           options: const [
             SegmentedToggleOption(
               value: FanMode.auto,
-              label: 'Auto',
+              label: 'Automatique',
             ),
             SegmentedToggleOption(
               value: FanMode.manual,

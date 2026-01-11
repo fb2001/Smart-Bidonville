@@ -43,14 +43,14 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
 
     if (ip.isEmpty) {
       setState(() {
-        _errorMessage = 'Please enter an IP address';
+        _errorMessage = 'Veuillez entrer une adresse IP';
       });
       return;
     }
 
     if (!_validateIp(ip)) {
       setState(() {
-        _errorMessage = 'Invalid IP format (e.g., 192.168.1.100)';
+        _errorMessage = 'Format IP invalide (ex: 192.168.1.100)';
       });
       return;
     }
@@ -77,7 +77,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
     } catch (e) {
       if (mounted) {
         setState(() {
-          _errorMessage = 'QR scan failed: ${e.toString()}';
+          _errorMessage = 'Échec du scan QR : ${e.toString()}';
         });
       }
     }
@@ -85,11 +85,13 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.transparent,
-      child: SimpleGlassCard(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Column(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Dialog(
+        backgroundColor: Colors.transparent,
+        child: SimpleGlassCard(
+          padding: const EdgeInsets.all(AppSpacing.lg),
+          child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -111,7 +113,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Text(
-                  'ESP32 Configuration',
+                  'Configuration ESP32',
                   style: AppTypography.titleLarge,
                 ),
               ],
@@ -119,21 +121,21 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
             const SizedBox(height: AppSpacing.lg),
 
             Text(
-              'Connect to your TTGO T-Display ESP32:',
+              'Connectez-vous à votre TTGO T-Display ESP32 :',
               style: AppTypography.bodyMedium,
             ),
             const SizedBox(height: AppSpacing.lg),
 
-            // QR Scan Button
+            // Bouton scan QR
             SecondaryButton(
-              text: 'Scan QR Code (Secure)',
+              text: 'Scanner le QR Code',
               icon: Icons.qr_code_scanner,
               onPressed: _handleQrScan,
             ),
 
             const SizedBox(height: AppSpacing.md),
 
-            // Divider with "OR"
+            // Séparateur avec "OU"
             Row(
               children: [
                 Expanded(
@@ -145,7 +147,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                   child: Text(
-                    'OR',
+                    'OU',
                     style: TextStyle(
                       color: AppColors.textMuted,
                       fontSize: 12,
@@ -163,18 +165,19 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
 
             const SizedBox(height: AppSpacing.md),
 
-            // Manual IP Entry
+            // Saisie manuelle de l'IP
             Text(
-              'Enter IP address manually:',
+              'Entrer l\'adresse IP manuellement :',
               style: AppTypography.labelMedium,
             ),
             const SizedBox(height: AppSpacing.sm),
 
             AppTextField(
               controller: _controller,
-              labelText: 'IP Address',
+              labelText: 'Adresse IP',
               hintText: '192.168.1.100',
               keyboardType: TextInputType.number,
+              textInputAction: TextInputAction.done,
               suffixIcon: Icons.edit,
               onChanged: (_) {
                 if (_errorMessage != null) {
@@ -196,30 +199,6 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
               ),
             ],
 
-            const SizedBox(height: AppSpacing.sm),
-
-            // Info text
-            Row(
-              children: [
-                Icon(
-                  Icons.info_outline,
-                  size: 14,
-                  color: AppColors.textMuted,
-                ),
-                const SizedBox(width: AppSpacing.xs),
-                Expanded(
-                  child: Text(
-                    'Manual entry is less secure - QR code is recommended',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppColors.textMuted,
-                      fontStyle: FontStyle.italic,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
             const SizedBox(height: AppSpacing.lg),
 
             // Actions
@@ -227,14 +206,14 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
               children: [
                 Expanded(
                   child: SecondaryButton(
-                    text: 'Cancel',
+                    text: 'Annuler',
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: PrimaryButton(
-                    text: 'Connect',
+                    text: 'Connecter',
                     onPressed: _handleSubmit,
                   ),
                 ),
@@ -242,6 +221,7 @@ class _IpConfigDialogState extends State<IpConfigDialog> {
             ),
           ],
         ),
+      ),
       ),
     );
   }
@@ -251,6 +231,7 @@ Future<DeviceCredentials?> showIpConfigDialog(BuildContext context, {String? cur
   return showDialog<DeviceCredentials>(
     context: context,
     barrierDismissible: false,
+    barrierColor: Colors.black.withOpacity(0.85),
     builder: (context) => IpConfigDialog(currentIp: currentIp),
   );
 }
