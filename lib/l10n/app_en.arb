@@ -14,6 +14,7 @@
   "resetPassword": "Reset Password",
   "sendResetEmail": "Send Reset Email",
   "cancel": "Cancel",
+  "close": "Close",
   "send": "Send",
   "enterYourEmail": "Enter your email",
   "resetEmailSent": "Reset email sent",
@@ -34,5 +35,64 @@
   "userDisabled": "This account has been disabled.",
   "tooManyRequests": "Too many attempts. Try again later.",
   "operationNotAllowed": "Operation not allowed.",
-  "errorOccurred": "An error occurred"
+  "errorOccurred": "An error occurred",
+
+  "esp32ConfigurationTitle": "ESP32 Configuration",
+  "esp32ConnectInstruction": "Connect to your TTGO T-Display ESP32:",
+  "scanQrCode": "Scan QR Code",
+  "qrScanFailed": "QR scan failed: {error}",
+  "@qrScanFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrScannerTitle": "Scan ESP32 QR Code",
+  "qrInvalid": "Invalid QR code: {error}",
+  "@qrInvalid": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "toggleFlashlight": "Toggle flashlight",
+  "switchCamera": "Switch camera",
+  "qrScannerInstructionTitle": "Scan the QR code shown on your ESP32",
+  "qrScannerInstructionSubtitle": "Make sure the QR code is clearly visible and well lit",
+
+  "firebaseInitErrorTitle": "Firebase initialization error",
+  "unknownError": "Unknown error",
+  "retry": "Try again",
+  "initializing": "Initializing...",
+
+  "connectionErrorTitle": "Connection error",
+  "connectingToEsp32": "Connecting to ESP32...",
+  "rescanQrCode": "Rescan QR Code",
+  "noEsp32Configured": "No ESP32 configured",
+  "configureEsp32": "Configure ESP32",
+  "setFanTo": "Set fan to:"
+  ,
+  "fanSpeedLabel": "Fan speed",
+  "fanSpeedStopped": "Stopped",
+  "fanSpeedSlow": "Slow",
+  "fanSpeedMedium": "Medium",
+  "fanSpeedFast": "Fast",
+  "fanModeAuto": "Automatic",
+  "fanModeManual": "Manual",
+  "fanManualModeLabel": "Fan manual mode",
+  "save": "Save",
+  "fanSpeedSetTo": "Fan speed set to {speed}",
+  "@fanSpeedSetTo": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "thresholdsConstraint": "Thresholds must satisfy: Slow < Medium < Fast",
+  "thresholdsUpdated": "Thresholds updated successfully",
+  "degreesCelsius": "Degrees Celsius",
+  "fahrenheit": "Fahrenheit"
 }

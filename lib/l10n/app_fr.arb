@@ -14,6 +14,7 @@
   "resetPassword": "Réinitialiser le mot de passe",
   "sendResetEmail": "Envoyer l'email de réinitialisation",
   "cancel": "Annuler",
+  "close": "Fermer",
   "send": "Envoyer",
   "enterYourEmail": "Entrez votre email",
   "resetEmailSent": "Email de réinitialisation envoyé",
@@ -34,5 +35,64 @@
   "userDisabled": "Ce compte a été désactivé.",
   "tooManyRequests": "Trop de tentatives. Réessayez plus tard.",
   "operationNotAllowed": "Opération non autorisée.",
-  "errorOccurred": "Une erreur est survenue"
+  "errorOccurred": "Une erreur est survenue",
+
+  "esp32ConfigurationTitle": "Configuration ESP32",
+  "esp32ConnectInstruction": "Connectez-vous à votre TTGO T-Display ESP32 :",
+  "scanQrCode": "Scanner le QR Code",
+  "qrScanFailed": "Échec du scan QR : {error}",
+  "@qrScanFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "qrScannerTitle": "Scanner le QR Code ESP32",
+  "qrInvalid": "QR code invalide : {error}",
+  "@qrInvalid": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "toggleFlashlight": "Activer/désactiver la lampe",
+  "switchCamera": "Changer de caméra",
+  "qrScannerInstructionTitle": "Scannez le QR code affiché sur votre ESP32",
+  "qrScannerInstructionSubtitle": "Assurez-vous que le QR code est clairement visible et bien éclairé",
+
+  "firebaseInitErrorTitle": "Erreur d'initialisation Firebase",
+  "unknownError": "Erreur inconnue",
+  "retry": "Réessayer",
+  "initializing": "Initialisation...",
+
+  "connectionErrorTitle": "Erreur de connexion",
+  "connectingToEsp32": "Connexion à l'ESP32...",
+  "rescanQrCode": "Rescanner QR Code",
+  "noEsp32Configured": "Aucun ESP32 configuré",
+  "configureEsp32": "Configurer ESP32",
+  "setFanTo": "Régler le ventilateur sur :"
+  ,
+  "fanSpeedLabel": "Vitesse du ventilateur",
+  "fanSpeedStopped": "Arrêté",
+  "fanSpeedSlow": "Lent",
+  "fanSpeedMedium": "Moyen",
+  "fanSpeedFast": "Rapide",
+  "fanModeAuto": "Automatique",
+  "fanModeManual": "Manuel",
+  "fanManualModeLabel": "Mode manuel du ventilateur",
+  "save": "Enregistrer",
+  "fanSpeedSetTo": "Vitesse du ventilateur réglée sur {speed}",
+  "@fanSpeedSetTo": {
+    "placeholders": {
+      "speed": {
+        "type": "String"
+      }
+    }
+  },
+  "thresholdsConstraint": "Les seuils doivent respecter : Lent < Moyen < Rapide",
+  "thresholdsUpdated": "Seuils mis à jour avec succès",
+  "degreesCelsius": "Degrés Celsius",
+  "fahrenheit": "Fahrenheit"
 }

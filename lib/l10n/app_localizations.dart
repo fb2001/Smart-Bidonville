@@ -185,6 +185,12 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancel;
 
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
   /// No description provided for @send.
   ///
   /// In en, this message translates to:
@@ -310,6 +316,210 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred'**
   String get errorOccurred;
+
+  /// No description provided for @esp32ConfigurationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'ESP32 Configuration'**
+  String get esp32ConfigurationTitle;
+
+  /// No description provided for @esp32ConnectInstruction.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect to your TTGO T-Display ESP32:'**
+  String get esp32ConnectInstruction;
+
+  /// No description provided for @scanQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan QR Code'**
+  String get scanQrCode;
+
+  /// No description provided for @qrScanFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'QR scan failed: {error}'**
+  String qrScanFailed(String error);
+
+  /// No description provided for @qrScannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan ESP32 QR Code'**
+  String get qrScannerTitle;
+
+  /// No description provided for @qrInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid QR code: {error}'**
+  String qrInvalid(String error);
+
+  /// No description provided for @toggleFlashlight.
+  ///
+  /// In en, this message translates to:
+  /// **'Toggle flashlight'**
+  String get toggleFlashlight;
+
+  /// No description provided for @switchCamera.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch camera'**
+  String get switchCamera;
+
+  /// No description provided for @qrScannerInstructionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan the QR code shown on your ESP32'**
+  String get qrScannerInstructionTitle;
+
+  /// No description provided for @qrScannerInstructionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Make sure the QR code is clearly visible and well lit'**
+  String get qrScannerInstructionSubtitle;
+
+  /// No description provided for @firebaseInitErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Firebase initialization error'**
+  String get firebaseInitErrorTitle;
+
+  /// No description provided for @unknownError.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown error'**
+  String get unknownError;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get retry;
+
+  /// No description provided for @initializing.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing...'**
+  String get initializing;
+
+  /// No description provided for @connectionErrorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Connection error'**
+  String get connectionErrorTitle;
+
+  /// No description provided for @connectingToEsp32.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to ESP32...'**
+  String get connectingToEsp32;
+
+  /// No description provided for @rescanQrCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan QR Code'**
+  String get rescanQrCode;
+
+  /// No description provided for @noEsp32Configured.
+  ///
+  /// In en, this message translates to:
+  /// **'No ESP32 configured'**
+  String get noEsp32Configured;
+
+  /// No description provided for @configureEsp32.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure ESP32'**
+  String get configureEsp32;
+
+  /// No description provided for @setFanTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Set fan to:'**
+  String get setFanTo;
+
+  /// No description provided for @fanSpeedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fan speed'**
+  String get fanSpeedLabel;
+
+  /// No description provided for @fanSpeedStopped.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped'**
+  String get fanSpeedStopped;
+
+  /// No description provided for @fanSpeedSlow.
+  ///
+  /// In en, this message translates to:
+  /// **'Slow'**
+  String get fanSpeedSlow;
+
+  /// No description provided for @fanSpeedMedium.
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get fanSpeedMedium;
+
+  /// No description provided for @fanSpeedFast.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast'**
+  String get fanSpeedFast;
+
+  /// No description provided for @fanModeAuto.
+  ///
+  /// In en, this message translates to:
+  /// **'Automatic'**
+  String get fanModeAuto;
+
+  /// No description provided for @fanModeManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get fanModeManual;
+
+  /// No description provided for @fanManualModeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fan manual mode'**
+  String get fanManualModeLabel;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @fanSpeedSetTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Fan speed set to {speed}'**
+  String fanSpeedSetTo(String speed);
+
+  /// No description provided for @thresholdsConstraint.
+  ///
+  /// In en, this message translates to:
+  /// **'Thresholds must satisfy: Slow < Medium < Fast'**
+  String get thresholdsConstraint;
+
+  /// No description provided for @thresholdsUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Thresholds updated successfully'**
+  String get thresholdsUpdated;
+
+  /// No description provided for @degreesCelsius.
+  ///
+  /// In en, this message translates to:
+  /// **'Degrees Celsius'**
+  String get degreesCelsius;
+
+  /// No description provided for @fahrenheit.
+  ///
+  /// In en, this message translates to:
+  /// **'Fahrenheit'**
+  String get fahrenheit;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

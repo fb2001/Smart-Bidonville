@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/theme/app_theme.dart';
 import '../../../shared/widgets/glass_card.dart';
 
@@ -13,6 +14,8 @@ class TemperatureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SimpleGlassCard(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Row(
@@ -21,7 +24,7 @@ class TemperatureCard extends StatelessWidget {
           // Celsius
           _TemperatureUnit(
             value: temperature,
-            unit: 'Degrés Celsius',
+            unit: l10n.degreesCelsius,
             suffix: '°C',
           ),
           // Séparateur
@@ -33,7 +36,7 @@ class TemperatureCard extends StatelessWidget {
           // Fahrenheit
           _TemperatureUnit(
             value: temperatureFahrenheit,
-            unit: 'Fahrenheit',
+            unit: l10n.fahrenheit,
             suffix: '°F',
           ),
         ],

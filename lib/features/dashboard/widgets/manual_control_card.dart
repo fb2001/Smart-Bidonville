@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/models/fan_speed.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../shared/localization/fan_localizations.dart';
 import '../../../shared/theme/app_theme.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/app_button.dart';
@@ -21,6 +23,8 @@ class _ManualControlCardState extends State<ManualControlCard> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Consumer<DashboardProvider>(
       builder: (context, provider, _) {
         final isManualMode = provider.state.fanStatus?.mode.isManual ?? false;
@@ -33,7 +37,7 @@ class _ManualControlCardState extends State<ManualControlCard> {
               Padding(
                 padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                 child: Text(
-                  'Mode manuel du ventilateur',
+                  l10n.fanManualModeLabel,
                   style: TextStyle(
                     fontSize: 14,
                     color: AppColors.textMuted,
@@ -61,7 +65,7 @@ class _ManualControlCardState extends State<ManualControlCard> {
             // Bouton d'application (caché en mode auto selon Figma)
             if (isManualMode)
               PrimaryButton(
-                text: 'Enregistrer',
+                text: l10n.save,
                 isLoading: _isApplying,
                 onPressed: () async {
                   setState(() => _isApplying = true);
@@ -71,7 +75,11 @@ class _ManualControlCardState extends State<ManualControlCard> {
                   if (success && context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Vitesse du ventilateur réglée sur ${_selectedSpeed.displayName}'),
+                        content: Text(
+                          l10n.fanSpeedSetTo(
+                            _selectedSpeed.localizedName(l10n),
+                          ),
+                        ),
                         backgroundColor: AppColors.success,
                         duration: const Duration(seconds: 2),
                       ),
@@ -167,7 +175,7 @@ class _SpeedOptionTile extends StatelessWidget {
                 // Speed label
                 Expanded(
                   child: Text(
-                    speed.displayName,
+                    speed.localizedName(AppLocalizations.of(context)!),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,

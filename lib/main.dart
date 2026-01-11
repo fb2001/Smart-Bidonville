@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
           Locale('fr'),
           Locale('en'),
         ],
-        locale: const Locale('fr'),
         home: const FirebaseInitializer(),
       ),
     );
@@ -83,6 +82,8 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     // Error state
     if (_error) {
       return Scaffold(
@@ -110,13 +111,13 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
                   ),
                   const SizedBox(height: AppSpacing.lg),
                   Text(
-                    'Erreur d\'initialisation Firebase',
+                    l10n.firebaseInitErrorTitle,
                     style: AppTypography.titleLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   Text(
-                    _errorMessage ?? 'Erreur inconnue',
+                    _errorMessage ?? l10n.unknownError,
                     style: AppTypography.bodyMedium,
                     textAlign: TextAlign.center,
                   ),
@@ -129,7 +130,7 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
                       });
                       _initializeFirebase();
                     },
-                    child: const Text('Réessayer'),
+                    child: Text(l10n.retry),
                   ),
                 ],
               ),
@@ -180,7 +181,7 @@ class _FirebaseInitializerState extends State<FirebaseInitializer> {
                 ),
                 const SizedBox(height: AppSpacing.md),
                 Text(
-                  'Initialisation...',
+                  l10n.initializing,
                   style: AppTypography.bodyMedium,
                 ),
               ],

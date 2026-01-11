@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/models/fan_status.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../shared/localization/fan_localizations.dart';
 import '../../../shared/theme/app_theme.dart';
 import '../../../shared/widgets/glass_card.dart';
 
@@ -12,6 +14,8 @@ class FanStatusIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SimpleGlassCard(
       padding: const EdgeInsets.all(AppSpacing.lg),
       child: Row(
@@ -19,7 +23,7 @@ class FanStatusIndicator extends StatelessWidget {
         children: [
           // Mode display
           _StatusItem(
-            value: fanStatus.mode.displayName,
+            value: fanStatus.mode.localizedName(l10n),
             label: '',
             valueColor: AppColors.textPrimary,
           ),
@@ -31,8 +35,8 @@ class FanStatusIndicator extends StatelessWidget {
           ),
           // Affichage de la vitesse
           _StatusItem(
-            value: fanStatus.speed?.displayName ?? 'Arrêté',
-            label: 'Vitesse du ventilateur',
+            value: fanStatus.speed?.localizedName(l10n) ?? l10n.fanSpeedStopped,
+            label: l10n.fanSpeedLabel,
             valueColor: _getSpeedColor(),
           ),
         ],

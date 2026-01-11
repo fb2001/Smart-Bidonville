@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/models/fan_speed.dart';
 import '../../../core/models/temperature_thresholds.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../shared/theme/app_theme.dart';
 import '../../../shared/widgets/glass_card.dart';
 import '../../../shared/widgets/app_button.dart';
@@ -38,6 +39,8 @@ class _AutoThresholdCardState extends State<AutoThresholdCard> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Consumer<DashboardProvider>(
       builder: (context, provider, _) {
         final isAutoMode = provider.state.fanStatus?.mode.isAuto ?? false;
@@ -88,7 +91,7 @@ class _AutoThresholdCardState extends State<AutoThresholdCard> {
                       const SizedBox(width: AppSpacing.sm),
                       Expanded(
                         child: Text(
-                          'Les seuils doivent respecter : Lent < Moyen < Rapide',
+                          l10n.thresholdsConstraint,
                           style: TextStyle(
                             fontSize: 12,
                             color: AppColors.warning,
@@ -102,7 +105,7 @@ class _AutoThresholdCardState extends State<AutoThresholdCard> {
 
             // Bouton enregistrer
             PrimaryButton(
-              text: 'Enregistrer',
+              text: l10n.save,
               isLoading: _isApplying,
               onPressed: (isAutoMode && _isValid)
                   ? () async {
@@ -119,10 +122,10 @@ class _AutoThresholdCardState extends State<AutoThresholdCard> {
 
                       if (success && context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Seuils mis à jour avec succès'),
+                          SnackBar(
+                            content: Text(l10n.thresholdsUpdated),
                             backgroundColor: AppColors.success,
-                            duration: Duration(seconds: 2),
+                            duration: const Duration(seconds: 2),
                           ),
                         );
                       }

@@ -13,6 +13,7 @@ import '../widgets/auto_threshold_card.dart';
 import '../widgets/fan_status_indicator.dart';
 import '../../../core/services/auth_service.dart';
 import '../../auth/presentation/screens/login_screen.dart';
+import '../../../l10n/app_localizations.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -58,8 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Future<void> _handleIpReconfigure() async {
-    final currentIp = await Esp32Config().getIpAddress();
-    final newCredentials = await showIpConfigDialog(context, currentIp: currentIp);
+    final newCredentials = await showIpConfigDialog(context);
 
     if (newCredentials != null && mounted) {
       await context.read<DashboardProvider>().setCredentials(newCredentials);
@@ -154,6 +154,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildErrorState(DashboardProvider provider, String errorMessage) {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -169,7 +170,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: AppSpacing.md),
               Text(
-                'Erreur de connexion',
+                l10n.connectionErrorTitle,
                 style: AppTypography.titleLarge,
               ),
               const SizedBox(height: AppSpacing.sm),
@@ -180,12 +181,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               const SizedBox(height: AppSpacing.lg),
               PrimaryButton(
-                text: 'Réessayer',
+                text: l10n.retry,
                 onPressed: () => provider.refreshData(),
               ),
               const SizedBox(height: AppSpacing.sm),
               SecondaryButton(
-                text: 'Rescanner QR Code',
+                text: l10n.rescanQrCode,
                 onPressed: _handleIpReconfigure,
               ),
             ],
@@ -196,6 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildLoadingState() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: SimpleGlassCard(
         padding: const EdgeInsets.all(AppSpacing.xl),
@@ -212,7 +214,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Connexion à l\'ESP32...',
+              l10n.connectingToEsp32,
               style: AppTypography.bodyLarge,
             ),
           ],
@@ -243,7 +245,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             // Titre de section "Régler le ventilateur sur :"
             Text(
-              'Régler le ventilateur sur :',
+              AppLocalizations.of(context)!.setFanTo,
               style: AppTypography.titleLarge.copyWith(
                 color: AppColors.textPrimary,
               ),
@@ -268,6 +270,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildInitialState() {
+    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: SimpleGlassCard(
         padding: const EdgeInsets.all(AppSpacing.xl),
@@ -281,12 +284,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             const SizedBox(height: AppSpacing.md),
             Text(
-              'Aucun ESP32 configuré',
+              l10n.noEsp32Configured,
               style: AppTypography.titleLarge,
             ),
             const SizedBox(height: AppSpacing.lg),
             PrimaryButton(
-              text: 'Configurer ESP32',
+              text: l10n.configureEsp32,
               onPressed: _handleIpReconfigure,
               width: 180,
             ),

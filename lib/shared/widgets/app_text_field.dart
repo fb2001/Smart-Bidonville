@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_theme.dart';
 
 /// Styled text field matching Figma design
@@ -163,9 +164,11 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return AppTextField(
       controller: widget.controller,
-      labelText: widget.labelText ?? 'Mot de passe',
+      labelText: widget.labelText ?? l10n.password,
       obscureText: _obscureText,
       suffixIcon: _obscureText ? Icons.lock_outline : Icons.lock_open_outlined,
       onSuffixIconTap: () {
@@ -178,10 +181,10 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       validator: widget.validator ??
           (value) {
             if (value == null || value.isEmpty) {
-              return 'Mot de passe requis';
+              return l10n.passwordRequired;
             }
             if (value.length < 6) {
-              return 'Le mot de passe doit contenir au moins 6 caractères';
+              return l10n.passwordTooShort;
             }
             return null;
           },
