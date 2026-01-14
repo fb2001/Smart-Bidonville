@@ -54,6 +54,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get cancel => 'Annuler';
 
   @override
+  String get close => 'Fermer';
+
+  @override
   String get send => 'Envoyer';
 
   @override
@@ -115,4 +118,112 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get errorOccurred => 'Une erreur est survenue';
+
+  @override
+  String get esp32ConfigurationTitle => 'Configuration ESP32';
+
+  @override
+  String get esp32ConnectInstruction => 'Connectez-vous à votre TTGO T-Display ESP32 :';
+
+  @override
+  String get scanQrCode => 'Scanner le QR Code';
+
+  @override
+  String qrScanFailed(String error) {
+    return 'Échec du scan QR : $error';
+  }
+
+  @override
+  String get qrScannerTitle => 'Scanner le QR Code ESP32';
+
+  @override
+  String qrInvalid(String error) {
+    return 'QR code invalide : $error';
+  }
+
+  @override
+  String get toggleFlashlight => 'Activer/désactiver la lampe';
+
+  @override
+  String get switchCamera => 'Changer de caméra';
+
+  @override
+  String get qrScannerInstructionTitle => 'Scannez le QR code affiché sur votre ESP32';
+
+  @override
+  String get qrScannerInstructionSubtitle => 'Assurez-vous que le QR code est clairement visible et bien éclairé';
+
+  @override
+  String get firebaseInitErrorTitle => 'Erreur d\'initialisation Firebase';
+
+  @override
+  String get unknownError => 'Erreur inconnue';
+
+  @override
+  String get retry => 'Réessayer';
+
+  @override
+  String get initializing => 'Initialisation...';
+
+  @override
+  String get connectionErrorTitle => 'Erreur de connexion';
+
+  @override
+  String get connectingToEsp32 => 'Connexion à l\'ESP32...';
+
+  @override
+  String get rescanQrCode => 'Rescanner QR Code';
+
+  @override
+  String get noEsp32Configured => 'Aucun ESP32 configuré';
+
+  @override
+  String get configureEsp32 => 'Configurer ESP32';
+
+  @override
+  String get setFanTo => 'Régler le ventilateur sur :';
+
+  @override
+  String get fanSpeedLabel => 'Vitesse du ventilateur';
+
+  @override
+  String get fanSpeedStopped => 'Arrêté';
+
+  @override
+  String get fanSpeedSlow => 'Lent';
+
+  @override
+  String get fanSpeedMedium => 'Moyen';
+
+  @override
+  String get fanSpeedFast => 'Rapide';
+
+  @override
+  String get fanModeAuto => 'Automatique';
+
+  @override
+  String get fanModeManual => 'Manuel';
+
+  @override
+  String get fanManualModeLabel => 'Mode manuel du ventilateur';
+
+  @override
+  String get save => 'Enregistrer';
+
+  @override
+  String fanSpeedSetTo(String speed) {
+    return 'Vitesse du ventilateur réglée sur $speed';
+  }
+
+  @override
+  String get thresholdsConstraint => 'Les seuils doivent respecter : Lent < Moyen < Rapide';
+
+  @override
+  String get thresholdsUpdated => 'Seuils mis à jour avec succès';
+
+  @override
+  String get degreesCelsius => 'Degrés Celsius';
+
+  @override
+  String get fahrenheit => 'Fahrenheit';
 }
