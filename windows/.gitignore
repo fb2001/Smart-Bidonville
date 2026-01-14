@@ -15,3 +15,12 @@ x86/
 *.[Cc]ache
 # but keep track of directories ending in .cache
 !*.[Cc]ache/
+
+# Runner qui ne sont pas utiles
+Runner 2.xcodeproj
+Runner3.xcworkspace
+ios/GoogleService-Info 2.plist
+ios/Runner 3.xcworkspac
+ios/.gitignore 3
+ios/Podfile 3
+ios/Podfile 4.lock

@@ -40,6 +40,7 @@ dependencies:
   firebase_core: ^3.8.1
   firebase_auth: ^5.3.4
   firebase_auth_web: ^5.11.0
+  google_sign_in: ^6.2.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -72,6 +73,7 @@ flutter:
   assets:
     - assets/background_login.jpg
     - assets/logo_app.jpg
+    - assets/google_logo.png
   generate: true
 
 

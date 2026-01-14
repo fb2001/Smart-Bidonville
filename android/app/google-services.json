@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "709314346120-npvg2ahhuncag0f0n99c9muet1jakojm.apps.googleusercontent.com",
+          "client_id": "709314346120-h9lhn8uivkssol2sfjsoj8bv2u94lv1p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.smart_bidonville",
+            "certificate_hash": "d88bc905da774e62622e061262451d87b7a24a10"
+          }
+        },
+        {
+          "client_id": "709314346120-vd0p9gorgargm8kdg0eocgvdedqvjnep.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -29,6 +37,13 @@
             {
               "client_id": "709314346120-npvg2ahhuncag0f0n99c9muet1jakojm.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "709314346120-tlcjsamk0j3r0j152fi4tjeuh6444k0n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.smartBidonville"
+              }
             }
           ]
         }
