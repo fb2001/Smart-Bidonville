@@ -12,12 +12,12 @@ void main() {
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
 
-    // On tape sur l'icône plus  puis on déclenche un frame.
+    // On tape sur l'icône plus et on déclenche un frame.
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 
     // On vérifie que le compteur s'incrémente.
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
-  }, skip: true, reason: 'Test par défaut du template Flutter, non pertinent pour cette app.');
+  }, skip: true); // Skip non-pertinent test
 }
