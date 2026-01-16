@@ -9,7 +9,7 @@ void main() {
     test('parsing_statut_complet', () {
       final json = {
         'temperature': 25.5,
-        'speed': 'medium',  // Updated to match Arduino API
+        'speed': 'medium',  // updated to match Arduino API
         'mode': 'auto',
         'color': '0,0,255'  // Blue for medium speed
       };
@@ -29,7 +29,7 @@ void main() {
       };
       final status = FanStatus.fromJson(json);
       expect(status.temperature, 22.0);
-      expect(status.speed, null);  // null when off
+      expect(status.speed, null);  // null quand off
       expect(status.isFanRunning, false);
     });
   });
