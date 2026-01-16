@@ -12,7 +12,7 @@ void main() {
     expect(find.text('0'), findsOneWidget);
     expect(find.text('1'), findsNothing);
 
-    // On tape sur l'icône '+' puis on déclenche un frame.
+    // On tape sur l'icône plus  puis on déclenche un frame.
     await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
 

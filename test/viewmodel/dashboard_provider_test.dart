@@ -30,7 +30,7 @@ void main() {
     provider = DashboardProvider(apiService: mockApiService, config: mockConfig);
   });
 
-  // Important : On arrête les timers après chaque test pour libérer les ressources
+  // On arrête les timers après chaque test pour libérer les ressources
   tearDown(() {
     provider.stopPolling();
     provider.dispose();
