@@ -1,4 +1,4 @@
-# Smart Bidonville - Clean Architecture
+# Smart Home
 
 ## Project Structure
 

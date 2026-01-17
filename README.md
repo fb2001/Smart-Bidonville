@@ -1,123 +1,187 @@
-# Smart Home - ESP32 Fan Controller
+# Smart Home
 
-A Flutter application for controlling a TTGO T-Display ESP32 smart fan system via REST API. Features temperature monitoring, automatic/manual fan control, and secure QR code device pairing.
+Application mobile Flutter pour Android et iOS, connectée à un ESP32 TTGO T-Display. Le système simule une ventilation intelligente, affichage de la température, contrôle automatique ou manuel, et communication REST sécurisée via un token transmis par QR code.
 
-## Features
+## Ce que fait l’app
 
-- **Temperature Monitoring**: Real-time temperature display in Celsius and Fahrenheit
-- **Dual Control Modes**:
-  - **Auto Mode**: Fan speed adjusts automatically based on temperature thresholds
-  - **Manual Mode**: Direct control with Slow/Medium/Fast speed options
-- **Secure Device Pairing**: QR code scanning for secure ESP32 connection with token authentication
-- **Firebase Authentication**: Email/password and Google Sign-In support
-- **Material 3 Design**: Modern UI with glassmorphism components and amber/gold theme
+- Connexion utilisateur via Firebase Authentication : email, mot de passe, Google
+- Appairage de l’ESP32 via QR code : IP, token
+- Mode automatique avec seuils configurables et mode manuel : Slow, Medium, Fast
+- Affichage de la température et de l’état du système
 
-## Screenshots
+## Prérequis
 
-The app design is based on Figma exports located in `/assets/`:
-- `iPhone 13 Pro Max - 3.png` - Login screen
-- `iPhone 13 Pro Max - 4.png` - Dashboard (Auto mode)
-- `iPhone 13 Pro Max - 5.png` - Dashboard (Manual mode)
+- Flutter, Dart ^3.10
+- Android Studio pour Android
+- Xcode et CocoaPods pour iOS
+- Configuration Firebase :
+   - Android : `android/app/google-services.json`
+   - iOS : `ios/GoogleService-Info.plist`
 
-## Architecture
+## Installation
 
-```
-lib/
-├── core/
-│   ├── api/              # HTTP client, API service
-│   ├── config/           # ESP32 configuration
-│   ├── models/           # Data models (FanStatus, DeviceCredentials, etc.)
-│   └── services/         # Auth service
-├── features/
-│   ├── auth/             # Login/Signup screens
-│   ├── dashboard/        # Main dashboard, widgets, viewmodel
-│   └── splash/           # Splash screen
-├── shared/
-│   ├── theme/            # Material 3 theme (app_theme.dart)
-│   └── widgets/          # Reusable UI components
-├── l10n/                 # Localization (EN/FR)
-└── main.dart
+```bash
+flutter pub get
 ```
 
-## Design System
+## Lancer l’app
 
-The app uses a custom Material 3 theme with:
+### Android
 
-### Colors
-| Token | Value | Usage |
-|-------|-------|-------|
-| Primary | `#D4A84B` | Amber/gold accent |
-| Background | `#1A1A1A` | Dark background |
-| Surface | `#2A2A2A` | Card backgrounds |
-| Speed Slow | `#FF5252` | Red indicator |
-| Speed Medium | `#448AFF` | Blue indicator |
-| Speed Fast | `#4CAF50` | Green indicator |
+Ouvrir le projet dans Android Studio, choisir un appareil, puis lancer.
 
-### Components
-- `GlassCard` / `SimpleGlassCard` - Glassmorphism containers
-- `SegmentedToggle` - Auto/Manual mode selector
-- `SpeedSelector` - Fan speed selection with icons
-- `ThresholdInput` - Temperature threshold configuration
-- `PrimaryButton` / `SecondaryButton` - Styled buttons
-- `AppTextField` - Styled text inputs
+Sinon :
 
-## ESP32 API Endpoints
+```bash
+flutter run
+```
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/mode` | Get current mode |
-| PUT | `/mode` | Set mode (auto/manual) |
-| GET | `/fan/status` | Get fan status |
-| PUT | `/fan/manual` | Set manual speed |
-| PUT | `/fan/threshold` | Set auto thresholds |
-| GET | `/temperature` | Get temperature |
+### iOS sur macOS
 
-All requests require `Authorization: Bearer <token>` header.
+#### Première installation
 
-## Setup
+**ÉTAPE OBLIGATOIRE** : Installer les dépendances CocoaPods
 
-### Prerequisites
-- Flutter SDK ^3.10.0
-- Firebase project configured
-- ESP32 with SmartHome firmware
+```bash
+cd ios
+pod install
+cd ..
+```
 
-### Installation
+Cette étape crée le fichier `Runner.xcworkspace` nécessaire pour Xcode.
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   flutter pub get
-   ```
-3. Configure Firebase:
-   - Add `google-services.json` (Android)
-   - Add `GoogleService-Info.plist` (iOS)
-4. Run the app:
-   ```bash
-   flutter run
-   ```
+#### Lancement via Xcode
 
-### ESP32 Pairing
+1. Ouvrir le workspace Xcode :
+```bash
+cd ios
+open Runner.xcworkspace
+```
 
-1. Power on the ESP32 device
-2. Generate a QR code from the device credentials JSON:
-   ```json
-   {
-     "ip": "192.168.1.100",
-     "token": "YourSecureToken",
-     "name": "ESP32 Smart Fan"
-   }
-   ```
-3. In the app, tap "Scan QR Code" to pair
+2. **IMPORTANT** : Toujours ouvrir `Runner.xcworkspace` et NON `Runner.xcodeproj`
 
-## Dependencies
+3. Dans Xcode :
+   - Sélectionner votre appareil (iPhone) ou simulateur
+   - Product ---> Build (⌘B)
+   - Product ---> Run (⌘R)
 
-- `firebase_core` / `firebase_auth` - Authentication
-- `google_sign_in` - Google authentication
-- `provider` - State management
-- `http` - REST API communication
-- `shared_preferences` - Local storage
-- `mobile_scanner` - QR code scanning
+#### Configuration requise
 
-## License
+##### Sur iPhone physique
 
-This project is for educational purposes.
+- Activer le **mode développeur** : Réglages ---> Confidentialité et sécurité ---> Mode développeur
+- Faire confiance au développeur : Réglages ---> Général ---> Gestion des appareils
+- S'assurer que l'iPhone est déverrouillé pendant le déploiement
+
+##### Signing & Capabilities
+
+Si erreur "Development team not configured" :
+1. Dans Xcode, sélectionner le projet Runner
+2. Onglet Signing & Capabilities
+3. Sélectionner votre Team ou cocher "Automatically manage signing"
+
+#### En cas de problèmes
+
+##### Erreur "No such file or directory" pour AppAuth ou autres pods
+
+Si vous rencontrez cette erreur en rouvrant le projet :
+```
+/ios/Pods/AppAuth/Sources/AppAuth.h: No such file or directory
+```
+
+**Solution rapide avec le script automatique** :
+
+```bash
+cd ios
+./fix_pods.sh
+```
+
+Ce script va automatiquement :
+- Nettoyer les pods existants
+- Réinstaller proprement toutes les dépendances
+- Corriger les chemins de build
+
+Ensuite, dans Xcode :
+1. Product → Clean Build Folder (Shift+⌘+K)
+2. Product → Build (⌘B)
+
+**Solution manuelle** :
+
+```bash
+cd ios
+rm -rf Pods Podfile.lock
+pod deintegrate
+pod install
+```
+
+Puis relancer depuis Xcode (Product → Clean Build Folder → Build)
+
+##### Erreur "No such module" ou erreurs de pods
+
+Si vous rencontrez des erreurs de type "No such module 'AppAuth'",
+
+**Solution rapide** :
+
+```bash
+flutter pub get
+cd ios
+rm -rf Pods Podfile.lock
+pod install
+```
+
+Puis relancer depuis Xcode (Product → Build → Run)
+
+**Si le problème persiste**, solution complète (peut prendre 15-30 minutes) :
+
+```bash
+cd ios
+rm -rf Pods Podfile.lock
+rm -rf ~/Library/Developer/Xcode/DerivedData
+pod deintegrate
+pod cache clean --all
+pod repo update
+pod install 
+cd ..
+flutter clean
+flutter pub get
+```
+
+Puis relancer depuis Xcode (Product → Build → Run)
+
+> **Note** : Le Podfile a été configuré pour éviter les problèmes de liens symboliques cassés. Si vous continuez à rencontrer des erreurs, utilisez le script `fix_pods.sh` qui résout la plupart des problèmes automatiquement.
+
+##### Erreur de build persistante
+
+En cas d'erreurs persistantes liées au dossier build :
+
+```bash
+sudo rm -rf build
+sudo xattr -cr .
+flutter clean
+flutter pub get
+cd ios
+open Runner.xcworkspace
+```
+
+Puis relancer depuis Xcode
+
+## Appairage ESP32
+
+Le QR code contient :
+
+```json
+{
+   "ip": "192.168.1.100",
+   "token": "SmartHomeProject2024SecureToken",
+   "name": "ESP32 Smart Fan"
+}
+```
+
+Le token est ensuite envoyé sur l’API via : `Authorization: Bearer <token>`.
+
+
+## Documentation API
+
+La documentation Swagger de l’API est disponible ici :
+
+https://app.swaggerhub.com/apis/universityofmontpell/smart-home-api/1.0.0

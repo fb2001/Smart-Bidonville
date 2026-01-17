@@ -7,7 +7,7 @@
 // ==================== SECURITY CONFIGURATION ====================
 // ⚠️ IMPORTANT: Change this token to something unique for your device!
 const char* AUTH_TOKEN = "SmartHomeProject2024SecureToken";
-const char* DEVICE_NAME = "ESP32 Smart Home";
+const char* DEVICE_NAME = "ESP32 Smart Bidonville";
 
 // Set to false to disable authentication (for testing only!)
 const bool AUTH_ENABLED = true;
@@ -271,7 +271,7 @@ void updateDisplay() {
         tft.setTextSize(2);
         tft.setTextColor(TFT_CYAN, TFT_BLACK);
         tft.setCursor(20, 10);
-        tft.println("SMART HOME IoT");
+        tft.println("SMART BIDONVILLE IoT");
         lastSpeed = -1; // Force redraw speed
     }
 
