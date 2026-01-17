@@ -15,10 +15,15 @@ coverage/
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/.kotlin/
+/android/app/src/main/res/drawable-*/
+/android/app/src/main/res/values/colors.xml
 
 # iOS
 /ios/Pods/
 /ios/Runner.xcworkspace/
+/ios/Podfile*.lock
+/ios/Flutter/Profile.xcconfig
 
 # IDEs
 .idea/
