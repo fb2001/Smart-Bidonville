@@ -38,6 +38,18 @@ flutter run
 
 ### iOS sur macOS
 
+#### Première installation
+
+**ÉTAPE OBLIGATOIRE** : Installer les dépendances CocoaPods
+
+```bash
+cd ios
+pod install
+cd ..
+```
+
+Cette étape crée le fichier `Runner.xcworkspace` nécessaire pour Xcode.
+
 #### Lancement via Xcode
 
 1. Ouvrir le workspace Xcode :
