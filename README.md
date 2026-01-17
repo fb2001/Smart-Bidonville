@@ -33,6 +33,7 @@ Ouvrir le projet dans Android Studio, choisir un appareil, puis lancer.
 Sinon :
 
 ```bash
+flutter pub run flutter_launcher_icons
 flutter run
 ```
 
