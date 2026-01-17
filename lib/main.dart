@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Smart Bidonville',
+        title: 'Smart Home',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.darkTheme,
         localizationsDelegates: const [
