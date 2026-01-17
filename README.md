@@ -1,4 +1,4 @@
-# Smart Bidonville
+# Smart Home
 
 Application mobile Flutter pour Android et iOS, connectée à un ESP32 TTGO T-Display. Le système simule une ventilation intelligente, affichage de la température, contrôle automatique ou manuel, et communication REST sécurisée via un token transmis par QR code.
 
