@@ -43,6 +43,13 @@ post_install do |installer|
     target.build_configurations.each do |config|
       # Force consistency across all pods
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+      
+      # Fix pour AppAuth et autres pods - empeche les liens symboliques casses
+      config.build_settings['ALWAYS_SEARCH_USER_PATHS'] = 'NO'
+      config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+      
+      # S'assurer que les chemins de build sont corrects
+      config.build_settings.delete('PRODUCT_BUNDLE_IDENTIFIER')
     end
   end
 end

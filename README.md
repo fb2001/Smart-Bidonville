@@ -70,11 +70,45 @@ Si erreur "Development team not configured" :
 
 #### En cas de problèmes
 
+##### Erreur "No such file or directory" pour AppAuth ou autres pods
+
+Si vous rencontrez cette erreur en rouvrant le projet :
+```
+/ios/Pods/AppAuth/Sources/AppAuth.h: No such file or directory
+```
+
+**Solution rapide avec le script automatique** :
+
+```bash
+cd ios
+./fix_pods.sh
+```
+
+Ce script va automatiquement :
+- Nettoyer les pods existants
+- Réinstaller proprement toutes les dépendances
+- Corriger les chemins de build
+
+Ensuite, dans Xcode :
+1. Product → Clean Build Folder (Shift+⌘+K)
+2. Product → Build (⌘B)
+
+**Solution manuelle** :
+
+```bash
+cd ios
+rm -rf Pods Podfile.lock
+pod deintegrate
+pod install
+```
+
+Puis relancer depuis Xcode (Product → Clean Build Folder → Build)
+
 ##### Erreur "No such module" ou erreurs de pods
 
 Si vous rencontrez des erreurs de type "No such module 'AppAuth'",
 
-**Essayez d'abord cette solution rapide ** :
+**Solution rapide** :
 
 ```bash
 flutter pub get
@@ -83,7 +117,7 @@ rm -rf Pods Podfile.lock
 pod install
 ```
 
-Puis relancer depuis Xcode (Product ---> Build ---> Run)
+Puis relancer depuis Xcode (Product → Build → Run)
 
 **Si le problème persiste**, solution complète (peut prendre 15-30 minutes) :
 
@@ -101,6 +135,8 @@ flutter pub get
 ```
 
 Puis relancer depuis Xcode (Product → Build → Run)
+
+> **Note** : Le Podfile a été configuré pour éviter les problèmes de liens symboliques cassés. Si vous continuez à rencontrer des erreurs, utilisez le script `fix_pods.sh` qui résout la plupart des problèmes automatiquement.
 
 ##### Erreur de build persistante
 
