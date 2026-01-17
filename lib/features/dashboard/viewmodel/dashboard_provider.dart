@@ -12,6 +12,7 @@ import 'dashboard_state.dart';
 class DashboardProvider extends ChangeNotifier {
   final FanApiService _apiService;
   final Esp32Config _config;
+  final bool _enablePolling;
 
   DashboardState _state = DashboardState.initial();
   DashboardState get state => _state;
@@ -24,8 +25,10 @@ class DashboardProvider extends ChangeNotifier {
   DashboardProvider({
     FanApiService? apiService,
     Esp32Config? config,
+    bool enablePolling = true,
   })  : _apiService = apiService ?? FanApiService(),
-        _config = config ?? Esp32Config();
+        _config = config ?? Esp32Config(),
+        _enablePolling = enablePolling;
 
   // === Initialization ===
   Future<void> initialize() async {
@@ -38,6 +41,7 @@ class DashboardProvider extends ChangeNotifier {
 
   // === Polling Control ===
   void startPolling() {
+    if (!_enablePolling) return;
     if (_pollingTimer?.isActive ?? false) return;
 
     _state = _state.copyWith(isPolling: true);

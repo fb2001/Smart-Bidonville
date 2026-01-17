@@ -68,6 +68,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  
+  # Pour générer les icônes d'app
+  flutter_launcher_icons: ^0.14.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -98,6 +101,14 @@ flutter:
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
+
+# Configuration des icônes de l'app
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/Smartbidonvillelogo.png"
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/Smartbidonvillelogo.png"
 
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/to/asset-from-package
