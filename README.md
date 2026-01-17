@@ -28,15 +28,16 @@ flutter pub get
 
 ### Android
 
-Ouvrir le projet dans Android Studio, choisir un appareil, puis lancer.
-
-Sinon :
-
 ```bash
 flutter pub run flutter_launcher_icons
 flutter run
 ```
+Sinon , ouvrir le projet dans Android Studio, choisir un appareil, puis appliquer ceci.
 
+```bash
+flutter pub run flutter_launcher_icons
+```
+Ainsi choisir votre emulateur ou telephone 
 ### iOS sur macOS
 
 #### Première installation
